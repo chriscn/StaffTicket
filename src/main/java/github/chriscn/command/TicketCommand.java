@@ -1,8 +1,7 @@
-package github.chriscn.staffticket.command;
+package github.chriscn.command;
 
-import github.chriscn.staffticket.StaffTicket;
+import github.chriscn.StaffTicket;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 

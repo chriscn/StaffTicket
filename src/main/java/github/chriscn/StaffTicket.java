@@ -1,8 +1,11 @@
-package github.chriscn.staffticket;
+package github.chriscn;
 
+import github.chriscn.command.TicketCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Random;
 
 public final class StaffTicket extends JavaPlugin {
 

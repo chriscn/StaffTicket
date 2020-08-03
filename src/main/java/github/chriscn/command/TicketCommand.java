@@ -1,10 +1,13 @@
 package github.chriscn.command;
 
 import github.chriscn.StaffTicket;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TicketCommand implements TabExecutor {
@@ -16,11 +19,50 @@ public class TicketCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return false;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (args.length < 3) {
+                player.sendMessage(ChatColor.RED + "Check your syntax");
+                return false;
+            } else {
+                String option = args[0].toLowerCase(); // create,review
+                if (option.equalsIgnoreCase("create")) {
+                    String id = plugin.generateID();
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 1; i < args.length; i++) {
+                        sb.append(args[i]).append(" ");
+                    }
+                    String msg = sb.toString().trim();
+
+                    // generate ticket
+                    player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + id);
+                    player.sendMessage("msg " + msg);
+                    return true;
+                } else if (option.equalsIgnoreCase("review")) {
+                    player.sendMessage("getting review");
+                    return true;
+                } else {
+                    player.sendMessage("not enough args");
+                    // unknown option
+                    return false;
+                }
+            }
+        } else {
+            sender.sendMessage(ChatColor.RED + "Unfortunately, this command can only be used by a Player.");
+            return true;
+        }
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            List<String> options = new ArrayList<>();
+            options.add("create");
+            if (sender.hasPermission(plugin.stHelper)) {
+                options.add("review");
+            }
+            return options;
+        }
         return null;
     }
 }

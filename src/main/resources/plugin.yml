@@ -1,0 +1,5 @@
+name: StaffTicket
+version: ${project.version}
+main: github.chriscn.staffticket.StaffTicket
+api-version: 1.16
+load: STARTUP

@@ -10,7 +10,7 @@ public final class StaffTicket extends JavaPlugin {
     public Permission stHelper = new Permission("staffticket.helper");
     public Permission stModerator = new Permission("staffticket.moderator");
     public Permission stAdmin = new Permission("staffticket.admin");
-    
+
     public final int ID_LENGTH = 8;
 
     @Override

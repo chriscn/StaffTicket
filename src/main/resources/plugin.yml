@@ -3,3 +3,6 @@ version: ${project.version}
 main: github.chriscn.StaffTicket
 api-version: 1.16
 load: STARTUP
+commands:
+  ticket:
+    usage: /ticket

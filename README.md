@@ -8,3 +8,7 @@ Allow's your users to submit tickets of bug reports, hacking, etc
 - [ ] Logging of when tickets are sent / opened / resolved
 - [ ] ability to assign someone to look at a ticket then when the login they'll get a notification
 - [ ] scabale across multiple servers with bungee cord
+## Permissions
+- `staffticket.open` - Allows the opening of tickets
+- `staffticket.review` - Allows the reviewing of tickets, seeing all tickets that aren't resolved
+- `staffticket.close` - Closing the ticket marking it as resolved.

@@ -11,9 +11,8 @@ import java.util.Random;
 public final class StaffTicket extends JavaPlugin {
 
     public Permission stOpen = new Permission("staffticket.open");
-    public Permission stHelper = new Permission("staffticket.helper");
-    public Permission stModerator = new Permission("staffticket.moderator");
-    public Permission stAdmin = new Permission("staffticket.admin");
+    public Permission stReview = new Permission("staffticket.review");
+    public Permission stClose = new Permission("staffticket.close");
 
     public final int ID_LENGTH = 8;
 
@@ -24,9 +23,8 @@ public final class StaffTicket extends JavaPlugin {
         // Plugin startup logic
 
         Bukkit.getPluginManager().addPermission(stOpen);
-        Bukkit.getPluginManager().addPermission(stHelper);
-        Bukkit.getPluginManager().addPermission(stModerator);
-        Bukkit.getPluginManager().addPermission(stAdmin);
+        Bukkit.getPluginManager().addPermission(stReview);
+        Bukkit.getPluginManager().addPermission(stClose);
 
         getCommand("ticket").setExecutor(new TicketCommand(this));
 

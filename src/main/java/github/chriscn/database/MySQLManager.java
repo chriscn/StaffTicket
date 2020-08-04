@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class MySQLManager {
 
-    private Connection connection;
+    public Connection connection;
     private String host;
     private String database;
     private String username;

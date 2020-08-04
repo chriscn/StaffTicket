@@ -16,7 +16,7 @@ public final class StaffTicket extends JavaPlugin {
 
     public final int ID_LENGTH = 8;
 
-    MySQLManager sqlManager = new MySQLManager("localhost", "staffticket", "root", "", 3306);
+    public MySQLManager sqlManager = new MySQLManager("localhost", "test", "tutorial", "tutorial", 3306);
 
     @Override
     public void onEnable() {

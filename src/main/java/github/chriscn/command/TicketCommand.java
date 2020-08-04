@@ -60,7 +60,7 @@ public class TicketCommand implements TabExecutor {
         if (args.length == 1) {
             List<String> options = new ArrayList<>();
             options.add("create");
-            if (sender.hasPermission(plugin.stHelper)) {
+            if (sender.hasPermission(plugin.stReview)) {
                 options.add("review");
             }
             return options;

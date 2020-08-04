@@ -2,6 +2,7 @@ package github.chriscn.command;
 
 import github.chriscn.StaffTicket;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -21,7 +22,7 @@ public class TicketCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (args.length < 3) {
+            if (args.length == 0) {
                 player.sendMessage(ChatColor.RED + "Check your syntax");
                 return false;
             } else {
@@ -40,9 +41,10 @@ public class TicketCommand implements TabExecutor {
                     return true;
                 } else if (option.equalsIgnoreCase("review")) {
                     player.sendMessage("getting review");
+                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> player.sendMessage("async ran"));
                     return true;
                 } else {
-                    player.sendMessage("not enough args");
+                    player.sendMessage("unknown argument");
                     // unknown option
                     return false;
                 }

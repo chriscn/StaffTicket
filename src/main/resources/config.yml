@@ -1,2 +1,11 @@
 # StaffTicket
 verbose: false
+# Database
+# Current options are: mysql
+database:
+  type: mysql
+  host: localhost
+  database:
+  port: 3306
+  username:
+  password: 

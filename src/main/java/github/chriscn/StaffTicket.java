@@ -41,8 +41,13 @@ public final class StaffTicket extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        // close db connections
     }
 
+    /**
+     * Generates an uppercase Base36 id, length depending on max length variable
+     * @return String ID
+     */
     public String generateID() {
         char[] availableChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
 

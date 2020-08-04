@@ -1,6 +1,7 @@
 package github.chriscn;
 
 import github.chriscn.command.TicketCommand;
+import github.chriscn.database.MySQLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +17,8 @@ public final class StaffTicket extends JavaPlugin {
 
     public final int ID_LENGTH = 8;
 
+    MySQLManager sqlManager = new MySQLManager("localhost", "staffticket", "root", "", 3306);
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -27,6 +30,14 @@ public final class StaffTicket extends JavaPlugin {
 
         getCommand("ticket").setExecutor(new TicketCommand(this));
 
+        try {
+            sqlManager.openConnection();
+        } catch (Exception e) {
+            getLogger().info("Error when trying to open SQL connection with error.");
+            e.printStackTrace();
+            getLogger().info("Disabling the plugin");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override

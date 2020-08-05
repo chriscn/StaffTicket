@@ -2,10 +2,12 @@
 verbose: false
 # Database
 # Current options are: mysql
+storage-method: mysql
+
 database:
-  type: mysql
-  host: localhost
-  database:
+  address: localhost
   port: 3306
+  database: minecraft
+
   username:
-  password: 
+  password: ''

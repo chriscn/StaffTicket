@@ -1,6 +1,7 @@
 package github.chriscn.command;
 
 import github.chriscn.StaffTicket;
+import github.chriscn.api.VirtualTicket;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -28,15 +29,18 @@ public class TicketCommand implements TabExecutor {
             } else {
                 String option = args[0].toLowerCase(); // create,review
                 if (option.equalsIgnoreCase("create")) {
-                    String id = plugin.generateID();
                     StringBuilder sb = new StringBuilder();
                     for (int i = 1; i < args.length; i++) {
                         sb.append(args[i]).append(" ");
                     }
                     String msg = sb.toString().trim();
 
+                    VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
+
+                    plugin.sql.submitTicket(ticket);
+
                     // generate ticket
-                    player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + id);
+                    player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
                     player.sendMessage("msg " + msg);
                     return true;
                 } else if (option.equalsIgnoreCase("review")) {

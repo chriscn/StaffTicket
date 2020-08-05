@@ -4,11 +4,7 @@ import github.chriscn.StaffTicket;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.UUID;
 
 public class VirtualTicket {
@@ -21,10 +17,18 @@ public class VirtualTicket {
 
     // this is for creating the ticket when using /ticket create
     // haven't yet decided how their gonna implement the method
-    public VirtualTicket(UUID uuid, String ticketMessage, boolean resolved) {
+    public VirtualTicket(UUID uuid, String ticketMessage) {
         this.id = new StaffTicket().generateID();
         this.timestamp = Instant.now().getEpochSecond();
         this.uuid = uuid;
+        this.ticketMessage = ticketMessage;
+        this.resolved = false;
+    }
+
+    public VirtualTicket(String id, long timestamp, String uuid, String ticketMessage, boolean resolved) {
+        this.id = id;
+        this.timestamp = timestamp;
+        this.uuid = UUID.fromString(uuid);
         this.ticketMessage = ticketMessage;
         this.resolved = resolved;
     }
@@ -33,16 +37,6 @@ public class VirtualTicket {
         // if just given the id, when player uses /ticket review <id> then fetch all the details of the ticket
     }
 
-    public void postToDatabase() {
-        String insert = "INSERT INTO staffticket(id,timestamp,uuid,message,resolved) VALUES (?, ?, ?, ?, ?)";
-        Connection connection = new StaffTicket().sqlManager.connection;
-        try {
-            PreparedStatement ps = connection.prepareStatement(insert);
-            ps.setString(1, this.id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public String getSenderName() {
         OfflinePlayer player = Bukkit.getOfflinePlayer(this.uuid);
@@ -73,5 +67,9 @@ public class VirtualTicket {
 
     public boolean getResolved() {
         return this.resolved;
+    }
+
+    public String getTicketMessage() {
+        return this.ticketMessage;
     }
 }

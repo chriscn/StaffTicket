@@ -41,11 +41,18 @@ public class TicketCommand implements TabExecutor {
 
                     // generate ticket
                     player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
-                    player.sendMessage("msg " + msg);
                     return true;
                 } else if (option.equalsIgnoreCase("review")) {
-                    player.sendMessage("getting review");
-                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> player.sendMessage("async ran"));
+                    String id = args[1].toLowerCase();
+
+                    VirtualTicket ticket = plugin.sql.getVirtualTicket(id);
+
+                    player.sendMessage("ID " + ticket.getID());
+                    player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
+                    player.sendMessage("Player " + ticket.getSenderName());
+                    player.sendMessage("Ticket Message " + ticket.getTicketMessage());
+                    player.sendMessage("Resolved " + ticket.getResolved());
+
                     return true;
                 } else {
                     player.sendMessage("unknown argument");

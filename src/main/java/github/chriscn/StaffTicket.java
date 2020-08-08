@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Random;
+import java.sql.SQLException;
 
 public final class StaffTicket extends JavaPlugin {
 
@@ -21,10 +21,12 @@ public final class StaffTicket extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
         Bukkit.getPluginManager().addPermission(stOpen);
         Bukkit.getPluginManager().addPermission(stReview);
         Bukkit.getPluginManager().addPermission(stClose);
+
+        getConfig().options().copyDefaults(true);
+        saveConfig();
 
         this.sql = new SQLManager(this);
 
@@ -35,22 +37,10 @@ public final class StaffTicket extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         // close db connections
-    }
-
-    /**
-     * Generates an uppercase Base36 id, length depending on max length variable
-     * @return String ID
-     */
-    public String generateID() {
-        char[] availableChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-
-        Random random = new Random();
-        StringBuilder id = new StringBuilder();
-
-        for (int i = 0; i < ID_LENGTH; i++) {
-            id.append(availableChars[random.nextInt(availableChars.length)]);
+        try {
+            sql.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        return id.toString().trim();
     }
 }

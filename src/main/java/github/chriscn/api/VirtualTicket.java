@@ -1,10 +1,10 @@
 package github.chriscn.api;
 
-import github.chriscn.StaffTicket;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.time.Instant;
+import java.util.Random;
 import java.util.UUID;
 
 public class VirtualTicket {
@@ -18,7 +18,7 @@ public class VirtualTicket {
     // this is for creating the ticket when using /ticket create
     // haven't yet decided how their gonna implement the method
     public VirtualTicket(UUID uuid, String ticketMessage) {
-        this.id = new StaffTicket().generateID();
+        this.id = this.generateID();
         this.timestamp = Instant.now().getEpochSecond();
         this.uuid = uuid;
         this.ticketMessage = ticketMessage;
@@ -32,11 +32,6 @@ public class VirtualTicket {
         this.ticketMessage = ticketMessage;
         this.resolved = resolved;
     }
-
-    public VirtualTicket(String id) {
-        // if just given the id, when player uses /ticket review <id> then fetch all the details of the ticket
-    }
-
 
     public String getSenderName() {
         OfflinePlayer player = Bukkit.getOfflinePlayer(this.uuid);
@@ -71,5 +66,22 @@ public class VirtualTicket {
 
     public String getTicketMessage() {
         return this.ticketMessage;
+    }
+
+    /**
+     * Generates an uppercase Base36 id, length depending on max length variable
+     * @return String ID
+     */
+    public String generateID() {
+        char[] availableChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+
+        Random random = new Random();
+        StringBuilder id = new StringBuilder();
+
+        for (int i = 0; i < 8; i++) {
+            id.append(availableChars[random.nextInt(availableChars.length)]);
+        }
+
+        return id.toString().trim();
     }
 }

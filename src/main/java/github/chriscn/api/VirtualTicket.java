@@ -9,10 +9,10 @@ import java.util.UUID;
 
 public class VirtualTicket {
 
-    private String id;
-    private long timestamp;
-    private UUID uuid;
-    private String ticketMessage;
+    private final String id;
+    private final long timestamp;
+    private final UUID uuid;
+    private final String ticketMessage;
     private boolean resolved;
 
     // this is for creating the ticket when using /ticket create

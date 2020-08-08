@@ -131,15 +131,81 @@ public class SQLManager {
     }
 
     public ArrayList<VirtualTicket> getAllTickets() {
+        ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
+        try {
+            PreparedStatement ticket = connection.prepareStatement("SELECT * FROM " + table);
+
+            ResultSet resultSet = ticket.executeQuery();
+
+            while (resultSet.next()) {
+                tickets.add(new VirtualTicket(
+                        resultSet.getString("ID"),
+                        resultSet.getLong("TIMESTAMP"),
+                        resultSet.getString("UUID"),
+                        resultSet.getString("MESSAGE"),
+                        resultSet.getBoolean("RESOLVED")
+                ));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tickets;
     }
 
     public ArrayList<VirtualTicket> getAllTickets(UUID uuid) {
+        ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
+        try {
+            PreparedStatement ticket = connection.prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
+            ticket.setString(1, uuid.toString());
+
+            ResultSet resultSet = ticket.executeQuery();
+
+            while (resultSet.next()) {
+                tickets.add(new VirtualTicket(
+                        resultSet.getString("ID"),
+                        resultSet.getLong("TIMESTAMP"),
+                        resultSet.getString("UUID"),
+                        resultSet.getString("MESSAGE"),
+                        resultSet.getBoolean("RESOLVED")
+                ));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tickets;
     }
 
     public ArrayList<VirtualTicket> getAllTickets(UUID uuid, boolean isResolved) {
+        ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
+        try {
+            PreparedStatement ticket = connection.prepareStatement("SELECT * FROM " + table + " WHERE UUID=? AND RESOLVED=?");
+            ticket.setString(1, uuid.toString());
+            ticket.setBoolean(2, isResolved);
+
+            ResultSet resultSet = ticket.executeQuery();
+
+            while (resultSet.next()) {
+                tickets.add(new VirtualTicket(
+                        resultSet.getString("ID"),
+                        resultSet.getLong("TIMESTAMP"),
+                        resultSet.getString("UUID"),
+                        resultSet.getString("MESSAGE"),
+                        resultSet.getBoolean("RESOLVED")
+                ));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tickets;
     }
 
     public Connection getConnection() {

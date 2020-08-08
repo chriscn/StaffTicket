@@ -1,6 +1,7 @@
 package github.chriscn.api;
 
 import github.chriscn.StaffTicket;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
 
@@ -10,16 +11,18 @@ public class SQLManager {
     private int port;
 
     private Connection connection;
+    private FileConfiguration config;
 
     StaffTicket plugin;
     public SQLManager(StaffTicket instance) {
         this.plugin = instance;
+        this.config = plugin.getConfig();
 
-        this.host = plugin.getConfig().getString("database.address");
-        this.port = plugin.getConfig().getInt("database.port");
-        this.database = plugin.getConfig().getString("database.database");
-        this.username = plugin.getConfig().getString("database.username");
-        this.password = plugin.getConfig().getString("database.password");
+        this.host = config.getString("database.address");
+        this.port = config.getInt("database.port");
+        this.database = config.getString("database.database");
+        this.username = config.getString("database.username");
+        this.password = config.getString("database.password");
 
         this.table = "staffticket";
 
@@ -36,6 +39,9 @@ public class SQLManager {
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
+            plugin.getLogger().severe("SQL Setup Failed with message " + e.getMessage());
+            plugin.getLogger().severe("Shutting down StaffTicket");
+            plugin.getPluginLoader().disablePlugin(plugin);
         } finally {
             if (!tableExists(table)) {
                 try {

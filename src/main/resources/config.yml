@@ -8,6 +8,5 @@ database:
   address: localhost
   port: 3306
   database: minecraft
-
   username:
   password: ''

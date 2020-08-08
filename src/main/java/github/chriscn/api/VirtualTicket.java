@@ -25,6 +25,7 @@ public class VirtualTicket {
         this.resolved = false;
     }
 
+    // generating a VirtualTicket from database information
     public VirtualTicket(String id, long timestamp, String uuid, String ticketMessage, boolean resolved) {
         this.id = id;
         this.timestamp = timestamp;

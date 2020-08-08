@@ -1,12 +1,8 @@
 package github.chriscn.api;
 
 import github.chriscn.StaffTicket;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class SQLManager {
 
@@ -51,7 +47,7 @@ public class SQLManager {
                 // CREATE TABLE `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
                 //  connection.prepareStatement("CREATE TABLE ")
                 PreparedStatement generateTable = connection.prepareStatement(
-                        "CREATE TABLE " + this.database + "." + this.table + " ( `ID` VARCHAR(" + plugin.ID_LENGTH + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
+                        "CREATE TABLE " + this.database + "." + this.table + " ( `ID` VARCHAR(" + 8 + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
                 );
 
                 generateTable.executeUpdate();
@@ -116,5 +112,9 @@ public class SQLManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

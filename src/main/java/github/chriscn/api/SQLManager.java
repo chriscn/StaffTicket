@@ -37,27 +37,23 @@ public class SQLManager {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            generateTable();
-        }
-    }
+            if (!tableExists(table)) {
+                try {
+                    // CREATE TABLE `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
+                    //  connection.prepareStatement("CREATE TABLE ")
+                    PreparedStatement generateTable = connection.prepareStatement(
+                            "CREATE TABLE " + this.database + "." + this.table + " ( `ID` VARCHAR(" + 8 + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
+                    );
 
-    private void generateTable() {
-        if (!tableExists(table)) {
-            try {
-                // CREATE TABLE `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
-                //  connection.prepareStatement("CREATE TABLE ")
-                PreparedStatement generateTable = connection.prepareStatement(
-                        "CREATE TABLE " + this.database + "." + this.table + " ( `ID` VARCHAR(" + 8 + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
-                );
+                    generateTable.executeUpdate();
 
-                generateTable.executeUpdate();
-
-                plugin.getLogger().info("Generated StaffTicket table.");
-            } catch (SQLException e) {
-                e.printStackTrace();
+                    plugin.getLogger().info("Generated StaffTicket table.");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                plugin.getLogger().info("StaffTicket table already existed.");
             }
-        } else {
-            plugin.getLogger().info("StaffTicket table already existed.");
         }
     }
 

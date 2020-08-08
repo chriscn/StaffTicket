@@ -15,9 +15,6 @@ public class VirtualTicket {
     private final String ticketMessage;
     private boolean resolved;
 
-    // this is for creating the ticket when using /ticket create
-    // haven't yet decided how their gonna implement the method
-
     /**
      * Generates a new VirtualTicket with a unique ID and the current unix timestamp when called.
      * @param uuid The UUID of the person that has opened the Ticket
@@ -30,8 +27,6 @@ public class VirtualTicket {
         this.ticketMessage = ticketMessage;
         this.resolved = false;
     }
-
-    // generating a VirtualTicket from database information
 
     /**
      * Creating a VirtualTicket from information from the backend database.

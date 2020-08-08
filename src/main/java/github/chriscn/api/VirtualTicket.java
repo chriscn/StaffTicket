@@ -54,10 +54,6 @@ public class VirtualTicket {
         return player.getName();
     }
 
-    public void updateResolved(boolean resolved) {
-        // connect to the db in order to update resolved
-    }
-
     public String getID() {
         return this.id;
     }

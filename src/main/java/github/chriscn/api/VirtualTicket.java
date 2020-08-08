@@ -17,6 +17,12 @@ public class VirtualTicket {
 
     // this is for creating the ticket when using /ticket create
     // haven't yet decided how their gonna implement the method
+
+    /**
+     * Generates a new VirtualTicket with a unique ID and the current unix timestamp when called.
+     * @param uuid The UUID of the person that has opened the Ticket
+     * @param ticketMessage The message supplied by opening the ticket
+     */
     public VirtualTicket(UUID uuid, String ticketMessage) {
         this.id = this.generateID();
         this.timestamp = Instant.now().getEpochSecond();
@@ -26,6 +32,15 @@ public class VirtualTicket {
     }
 
     // generating a VirtualTicket from database information
+
+    /**
+     * Creating a VirtualTicket from information from the backend database.
+     * @param id 8 Character ID
+     * @param timestamp A Unix timestamp
+     * @param uuid UUID of the person who generated the ticket
+     * @param ticketMessage Message contained within the ticket
+     * @param resolved Whether or not the ticket has been resolved
+     */
     public VirtualTicket(String id, long timestamp, String uuid, String ticketMessage, boolean resolved) {
         this.id = id;
         this.timestamp = timestamp;

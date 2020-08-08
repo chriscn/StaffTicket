@@ -4,14 +4,20 @@ import github.chriscn.StaffTicket;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class SQLManager {
 
-    private String host, database, username, password, table;
-    private int port;
+    private final String host;
+    private final String database;
+    private final String username;
+    private final String password;
+    private final String table;
+    private final int port;
 
     private Connection connection;
-    private FileConfiguration config;
+    private final FileConfiguration config;
 
     StaffTicket plugin;
     public SQLManager(StaffTicket instance) {
@@ -114,6 +120,26 @@ public class SQLManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean ticketExists(String id) {
+        return false;
+    }
+
+    public void closeTicket(String id) {
+        // TODO implemented method
+    }
+
+    public ArrayList<VirtualTicket> getAllTickets() {
+
+    }
+
+    public ArrayList<VirtualTicket> getAllTickets(UUID uuid) {
+
+    }
+
+    public ArrayList<VirtualTicket> getAllTickets(UUID uuid, boolean isResolved) {
+
     }
 
     public Connection getConnection() {

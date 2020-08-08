@@ -13,7 +13,7 @@ public class VirtualTicket {
     private final long timestamp;
     private final UUID uuid;
     private final String ticketMessage;
-    private boolean resolved;
+    private final boolean resolved;
 
     /**
      * Generates a new VirtualTicket with a unique ID and the current unix timestamp when called.

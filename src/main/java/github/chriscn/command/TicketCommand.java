@@ -66,7 +66,7 @@ public class TicketCommand implements TabExecutor {
                         return true;
                     } else if (option.equalsIgnoreCase("list")) {
                         String submittedBy = args[2].toLowerCase(); // this doesn't have to be supplied but allows getting
-                        if (submittedBy == "" || submittedBy == null || submittedBy.isEmpty()) {
+                        if (submittedBy == "" || submittedBy.isEmpty()) {
                             // get all unresolved tickets
                         } else {
 

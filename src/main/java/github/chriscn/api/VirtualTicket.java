@@ -74,7 +74,7 @@ public class VirtualTicket {
      * @return String ID
      */
     public String generateID() {
-        char[] availableChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+        char[] availableChars = "ABCDEFGHJKLMNOPQRSTVXYZ0123456789".toCharArray();
 
         Random random = new Random();
         StringBuilder id = new StringBuilder();

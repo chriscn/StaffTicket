@@ -3,7 +3,6 @@ package github.chriscn.command;
 import github.chriscn.StaffTicket;
 import github.chriscn.api.VirtualTicket;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -27,7 +26,7 @@ public class TicketCommand implements TabExecutor {
                 player.sendMessage(ChatColor.RED + "Check your syntax");
                 return false;
             } else {
-                String option = args[0].toLowerCase(); // create,review
+                String option = args[0].toLowerCase(); // create,review,close,list,get
                 if (option.equalsIgnoreCase("create")) {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 1; i < args.length; i++) {
@@ -42,28 +41,48 @@ public class TicketCommand implements TabExecutor {
                     // generate ticket
                     player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
                     return true;
-                } else if (option.equalsIgnoreCase("review")) {
+                } else {
                     String id = args[1].toLowerCase();
 
-                    VirtualTicket ticket = plugin.sql.getVirtualTicket(id);
+                    if (option.equalsIgnoreCase("review")) {
+                        VirtualTicket ticket = plugin.sql.getVirtualTicket(id);
 
-                    player.sendMessage("ID " + ticket.getID());
-                    player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
-                    player.sendMessage("Player " + ticket.getSenderName());
-                    player.sendMessage("Ticket Message " + ticket.getTicketMessage());
-                    player.sendMessage("Resolved " + ticket.getResolved());
+                        player.sendMessage("ID " + ticket.getID());
+                        player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
+                        player.sendMessage("Player " + ticket.getSenderName());
+                        player.sendMessage("Ticket Message " + ticket.getTicketMessage());
+                        player.sendMessage("Resolved " + ticket.getResolved());
 
-                    return true;
-                } else {
-                    player.sendMessage("unknown argument");
-                    // unknown option
-                    return false;
+                        return true;
+                    } else if (option.equalsIgnoreCase("close")) {
+                        // by closing a ticket you are setting it as resolved it doesn't delete it from the mysql system
+                        // TODO test to see if the ticket exists before trying to mark it as resolved
+                        if (plugin.sql.ticketExists(id)) {
+                            plugin.sql.closeTicket(id);
+                            player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + ChatColor.YELLOW + id);
+                        } else {
+                            player.sendMessage(ChatColor.RED + "I couldn't find that ticket on our system, use " + ChatColor.GREEN + "/ticket list");
+                        }
+                        return true;
+                    } else if (option.equalsIgnoreCase("list")) {
+                        String submittedBy = args[2].toLowerCase(); // this doesn't have to be supplied but allows getting
+                        if (submittedBy == "" || submittedBy == null || submittedBy.isEmpty()) {
+                            // get all unresolved tickets
+                        } else {
+
+                        }
+                    } else {
+                        player.sendMessage("unknown argument");
+                        // unknown option
+                        return false;
+                    }
                 }
             }
         } else {
             sender.sendMessage(ChatColor.RED + "Unfortunately, this command can only be used by a Player.");
             return true;
         }
+        return false;
     }
 
     @Override

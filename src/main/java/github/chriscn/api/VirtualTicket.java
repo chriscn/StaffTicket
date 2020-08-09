@@ -15,6 +15,8 @@ public class VirtualTicket {
     private final String ticketMessage;
     private final boolean resolved;
 
+    public final int ID_LENGTH = 8;
+
     /**
      * Generates a new VirtualTicket with a unique ID and the current unix timestamp when called.
      * @param uuid The UUID of the person that has opened the Ticket
@@ -85,7 +87,7 @@ public class VirtualTicket {
         Random random = new Random();
         StringBuilder id = new StringBuilder();
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < ID_LENGTH; i++) {
             id.append(availableChars[random.nextInt(availableChars.length)]);
         }
 

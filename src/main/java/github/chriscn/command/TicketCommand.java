@@ -3,6 +3,7 @@ package github.chriscn.command;
 import github.chriscn.StaffTicket;
 import github.chriscn.api.VirtualTicket;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TicketCommand implements TabExecutor {
 
@@ -58,7 +60,7 @@ public class TicketCommand implements TabExecutor {
                         // by closing a ticket you are setting it as resolved it doesn't delete it from the mysql system
                         // TODO test to see if the ticket exists before trying to mark it as resolved
                         if (plugin.sql.ticketExists(id)) {
-                            plugin.sql.closeTicket(id);
+                            plugin.sql.resolveTicket(id);
                             player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + ChatColor.YELLOW + id);
                         } else {
                             player.sendMessage(ChatColor.RED + "I couldn't find that ticket on our system, use " + ChatColor.GREEN + "/ticket list");
@@ -67,8 +69,20 @@ public class TicketCommand implements TabExecutor {
                     } else if (option.equalsIgnoreCase("list")) {
                         String submittedBy = args[2].toLowerCase(); // this doesn't have to be supplied but allows getting
                         if (submittedBy == "" || submittedBy.isEmpty()) {
+                            plugin.sql.getAllTickets().forEach(virtualTicket -> {
+                                player.sendMessage(virtualTicket.getID());
+                            });
                             // get all unresolved tickets
                         } else {
+                            if (submittedBy.matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
+                                // they've supplied a uuid for an unknown reason
+                            } else {
+                                UUID uuid = Bukkit.getPlayer(submittedBy).getUniqueId();
+
+                                plugin.sql.getAllTickets(uuid).forEach(virtualTicket -> {
+                                    player.sendMessage(virtualTicket.getID());
+                                });
+                            }
 
                         }
                     } else {

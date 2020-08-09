@@ -126,7 +126,8 @@ public class SQLManager {
         return false;
     }
 
-    public void closeTicket(String id) {
+    public void resolveTicket(String id) {
+
         // TODO implemented method
     }
 

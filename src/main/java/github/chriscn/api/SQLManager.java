@@ -15,7 +15,7 @@ public class SQLManager {
     private final String password;
     private final String table;
     private final int port;
-
+    
     private Connection connection;
     private final FileConfiguration config;
 

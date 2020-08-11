@@ -1,6 +1,7 @@
 package github.chriscn.api;
 
 import github.chriscn.StaffTicket;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
@@ -59,13 +60,13 @@ public class SQLManager {
 
                     plugin.getLogger().info("Generated StaffTicket table.");
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    handleException(e);
                 }
             } else {
                 plugin.getLogger().info("StaffTicket table already existed.");
             }
         } catch (SQLException | ClassNotFoundException e) {
-          //  e.printStackTrace();
+          //  handleException(e);
             plugin.getLogger().severe("SQL Setup Failed with message " + e.getMessage());
             plugin.getLogger().severe("Shutting down StaffTicket");
             plugin.getPluginLoader().disablePlugin(plugin);
@@ -83,7 +84,7 @@ public class SQLManager {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
         }
         return tExists;
     }
@@ -100,7 +101,7 @@ public class SQLManager {
 
             ticket.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
         }
     }
 
@@ -120,7 +121,7 @@ public class SQLManager {
                 resultSet.getBoolean("RESOLVED")
             );
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
         }
         return null;
     }
@@ -137,7 +138,7 @@ public class SQLManager {
 
             update.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
         }
 
         // TODO implemented method
@@ -162,7 +163,7 @@ public class SQLManager {
             }
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
         }
 
         return tickets;
@@ -188,7 +189,7 @@ public class SQLManager {
             }
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
         }
 
         return tickets;
@@ -215,7 +216,7 @@ public class SQLManager {
             }
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
         }
 
         return tickets;
@@ -223,5 +224,9 @@ public class SQLManager {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public void handleException(SQLException e) {
+        Bukkit.getLogger().info("[MYSQL] Error: " + e.getMessage());
     }
 }

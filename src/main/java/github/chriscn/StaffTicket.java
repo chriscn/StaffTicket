@@ -1,6 +1,7 @@
 package github.chriscn;
 
 import github.chriscn.api.SQLManager;
+import github.chriscn.command.StaffTicketCommand;
 import github.chriscn.command.TicketCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
@@ -32,6 +33,7 @@ public final class StaffTicket extends JavaPlugin {
         this.sql = new SQLManager(this);
 
         getCommand("ticket").setExecutor(new TicketCommand(this));
+        getCommand("staffticket").setExecutor(new StaffTicketCommand(this));
     }
 
     @Override

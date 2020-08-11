@@ -6,3 +6,5 @@ load: STARTUP
 commands:
   ticket:
     usage: /ticket
+  staffticket:
+    usage: /staffticket <reload>

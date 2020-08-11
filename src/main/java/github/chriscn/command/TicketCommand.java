@@ -60,7 +60,7 @@ public class TicketCommand implements TabExecutor {
                         // by closing a ticket you are setting it as resolved it doesn't delete it from the mysql system
                         // TODO test to see if the ticket exists before trying to mark it as resolved
                         if (plugin.sql.ticketExists(id)) {
-                            plugin.sql.resolveTicket(id);
+                            plugin.sql.resolveTicket(id, true);
                             player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + ChatColor.YELLOW + id);
                         } else {
                             player.sendMessage(ChatColor.RED + "I couldn't find that ticket on our system, use " + ChatColor.GREEN + "/ticket list");

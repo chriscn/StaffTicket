@@ -129,7 +129,16 @@ public class SQLManager {
         return false;
     }
 
-    public void resolveTicket(String id) {
+    public void resolveTicket(String id, boolean resolved) {
+        try {
+            PreparedStatement update = connection.prepareStatement("UPDATE " + table + " SET RESOLVED=? WHERE ID=?");
+            update.setBoolean(1, resolved);
+            update.setString(2, id);
+
+            update.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         // TODO implemented method
     }

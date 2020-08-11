@@ -15,7 +15,7 @@ import java.util.List;
 
 public class StaffTicketCommand implements TabExecutor {
 
-    String[] options = {"reload"};
+    String[] options = {"reload", "status"};
     List<String> commandOptions = Arrays.asList(options);
 
     StaffTicket plugin;
@@ -46,6 +46,18 @@ public class StaffTicketCommand implements TabExecutor {
                 plugin.sql = new SQLManager(plugin); // reinitalises the sql manager
 
                 sender.sendMessage(ChatColor.GREEN + "Successfully reloaded!");
+            } else if (firstOption.equalsIgnoreCase("status")) {
+                try {
+                    if(plugin.sql.getConnection().isValid(30)) {
+
+                    } else {
+
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }  else {
+                return false;
             }
 
             return true;

@@ -43,12 +43,7 @@ public class SQLManager {
 
                 plugin.getLogger().info("Successfully connected to the MySQL Database.");
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            plugin.getLogger().severe("SQL Setup Failed with message " + e.getMessage());
-            plugin.getLogger().severe("Shutting down StaffTicket");
-            plugin.getPluginLoader().disablePlugin(plugin);
-        } finally {
+
             if (!tableExists(table)) {
                 try {
                     // CREATE TABLE `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
@@ -66,6 +61,11 @@ public class SQLManager {
             } else {
                 plugin.getLogger().info("StaffTicket table already existed.");
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            plugin.getLogger().severe("SQL Setup Failed with message " + e.getMessage());
+            plugin.getLogger().severe("Shutting down StaffTicket");
+            plugin.getPluginLoader().disablePlugin(plugin);
         }
     }
 

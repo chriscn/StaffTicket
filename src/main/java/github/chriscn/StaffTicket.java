@@ -17,6 +17,7 @@ public final class StaffTicket extends JavaPlugin {
     public final int ID_LENGTH = 8;
 
     public SQLManager sql;
+    public boolean SUCCESSFUL_CONNECTION;
 
     @Override
     public void onEnable() {
@@ -37,10 +38,12 @@ public final class StaffTicket extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         // close db connections
-        try {
-            sql.getConnection().close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (SUCCESSFUL_CONNECTION) {
+            try {
+                sql.getConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

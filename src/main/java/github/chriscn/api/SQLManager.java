@@ -24,6 +24,8 @@ public class SQLManager {
         this.plugin = instance;
         this.config = plugin.getConfig();
 
+        plugin.SUCCESSFUL_CONNECTION = false;
+
         this.host = config.getString("database.address");
         this.port = config.getInt("database.port");
         this.database = config.getString("database.database");
@@ -42,6 +44,7 @@ public class SQLManager {
                 this.connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
 
                 plugin.getLogger().info("Successfully connected to the MySQL Database.");
+                plugin.SUCCESSFUL_CONNECTION = true;
             }
 
             if (!tableExists(table)) {
@@ -62,7 +65,7 @@ public class SQLManager {
                 plugin.getLogger().info("StaffTicket table already existed.");
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
             plugin.getLogger().severe("SQL Setup Failed with message " + e.getMessage());
             plugin.getLogger().severe("Shutting down StaffTicket");
             plugin.getPluginLoader().disablePlugin(plugin);

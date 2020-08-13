@@ -1,6 +1,7 @@
-package github.chriscn.api;
+package github.chriscn.database;
 
 import github.chriscn.StaffTicket;
+import github.chriscn.api.VirtualTicket;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 

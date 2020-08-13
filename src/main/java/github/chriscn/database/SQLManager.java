@@ -44,7 +44,7 @@ public class SQLManager {
                 Class.forName("com.mysql.jdbc.Driver");
                 this.connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
 
-                plugin.getLogger().info("Successfully connected to the MySQL Database.");
+                plugin.getLogger().info("Successfully connected to the MySQL DatabaseManager.");
                 plugin.SUCCESSFUL_CONNECTION = true;
             }
 

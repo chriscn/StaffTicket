@@ -1,6 +1,7 @@
 package github.chriscn;
 
-import github.chriscn.api.SQLManager;
+import github.chriscn.database.DatabaseManager;
+import github.chriscn.database.SQLManager;
 import github.chriscn.command.StaffTicketCommand;
 import github.chriscn.command.TicketCommand;
 import org.bukkit.Bukkit;
@@ -19,6 +20,8 @@ public final class StaffTicket extends JavaPlugin {
 
     public SQLManager sql;
     public boolean SUCCESSFUL_CONNECTION;
+
+    public DatabaseManager db;
 
     @Override
     public void onEnable() {

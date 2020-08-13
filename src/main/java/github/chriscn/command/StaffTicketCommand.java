@@ -1,15 +1,13 @@
 package github.chriscn.command;
 
 import github.chriscn.StaffTicket;
-import github.chriscn.api.SQLManager;
+import github.chriscn.database.SQLManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

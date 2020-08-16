@@ -81,7 +81,7 @@ public class VirtualTicket {
      * Generates an uppercase Base36 id, length depending on max length variable
      * @return String ID
      */
-    public String generateID() {
+    private String generateID() {
         char[] availableChars = "ABCDEFGHJKLMNOPQRSTVXYZ0123456789".toCharArray();
 
         Random random = new Random();

@@ -31,33 +31,38 @@ public class TicketCommand implements TabExecutor {
                 } else {
                     String option = args[0].toLowerCase(); // create,review,close,list,get
                     if (option.equalsIgnoreCase("create")) {
-                        StringBuilder sb = new StringBuilder();
-                        for (int i = 1; i < args.length; i++) {
-                            sb.append(args[i]).append(" ");
-                        }
-                        String msg = sb.toString().trim();
+                        if (player.hasPermission(plugin.stOpen)) {
 
-                        VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 1; i < args.length; i++) {
+                                sb.append(args[i]).append(" ");
+                            }
+                            String msg = sb.toString().trim();
 
-                        plugin.db.createTicket(ticket);
+                            VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
 
-                        // generate ticket
-                        player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
+                            plugin.db.createTicket(ticket);
+
+                            // generate ticket
+                            player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
+                        } else noPermission(player);
                         return true;
                     } else {
                         String id = args[1].toLowerCase();
 
                         if (option.equalsIgnoreCase("review")) {
-                            VirtualTicket ticket = plugin.db.getTicket(id);
+                            if (player.hasPermission(plugin.stReview)) {
 
-                            player.sendMessage("ID " + ticket.getID());
-                            player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
-                            player.sendMessage("Player " + ticket.getSenderName());
-                            player.sendMessage("Ticket Message " + ticket.getTicketMessage());
-                            player.sendMessage("Resolved " + ticket.getResolved());
+                                VirtualTicket ticket = plugin.db.getTicket(id);
 
-                            return true;
-                        }/* else if (option.equalsIgnoreCase("close")) {
+                                player.sendMessage("ID " + ticket.getID());
+                                player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
+                                player.sendMessage("Player " + ticket.getSenderName());
+                                player.sendMessage("Ticket Message " + ticket.getTicketMessage());
+                                player.sendMessage("Resolved " + ticket.getResolved());
+
+                                return true;
+                            }/* else if (option.equalsIgnoreCase("close")) {
                         // by closing a ticket you are setting it as resolved it doesn't delete it from the mysql system
                         // TODO test to see if the ticket exists before trying to mark it as resolved
 
@@ -87,6 +92,7 @@ public class TicketCommand implements TabExecutor {
                             }
 
                         }*/
+                        } else noPermission(player);
                     }
                 }
             } else {
@@ -111,5 +117,9 @@ public class TicketCommand implements TabExecutor {
             return options;
         }
         return null;
+    }
+
+    private void noPermission(Player player) {
+        player.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
     }
 }

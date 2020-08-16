@@ -41,12 +41,11 @@ public class MySQL implements DatabaseManager {
                 }
 
                 Class.forName("com.mysql.jdbc.Driver");
-
                 this.connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
-                plugin.getLogger().info("Successfully connected to the MySQL DatabaseManager.");
 
+                plugin.getLogger().info("Successfully connected to the MySQL Database.");
                 plugin.SUCCESSFUL_CONNECTION = true;
-
+                plugin.PLUGIN_ENABLED = true;
             }
 
             if (!tableExists(table)) {
@@ -68,6 +67,7 @@ public class MySQL implements DatabaseManager {
             }
         } catch (SQLException | ClassNotFoundException e) {
             plugin.getLogger().severe("[SQL] Setup Failed with message " + e.getMessage());
+            e.printStackTrace();
             plugin.PLUGIN_ENABLED = false;
         }
     }
@@ -131,7 +131,7 @@ public class MySQL implements DatabaseManager {
     public boolean ticketExists(String id) {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement("SELECT FROM " + table + " WHERE ID=?");
+            statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE ID=?");
             statement.setString(1, id);
 
             ResultSet resultSet = statement.executeQuery();

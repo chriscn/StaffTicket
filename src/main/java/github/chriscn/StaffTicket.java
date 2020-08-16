@@ -55,7 +55,7 @@ public final class StaffTicket extends JavaPlugin {
         // close db connections
         closeConnection();
     }
-
+     
     public void reloadPlugin() {
         closeConnection();
         this.db = null;
@@ -85,6 +85,7 @@ public final class StaffTicket extends JavaPlugin {
             try {
                 db.closeConnection();
             } catch (Exception e) {
+                getLogger().severe("Error when trying to close Database connection.");
                 e.printStackTrace();
             }
         }

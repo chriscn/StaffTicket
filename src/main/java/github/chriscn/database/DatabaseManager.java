@@ -10,6 +10,6 @@ public interface DatabaseManager {
     void createTicket(VirtualTicket ticket);
     void resolveTicket(String id, boolean resolved);
 
-    boolean ticketExists(VirtualTicket ticket);
+    boolean ticketExists(String id);
     VirtualTicket getTicket(String id);
 }

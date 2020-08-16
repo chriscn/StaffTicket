@@ -128,7 +128,20 @@ public class MySQL implements DatabaseManager {
     }
 
     @Override
-    public boolean ticketExists(VirtualTicket ticket) {
+    public boolean ticketExists(String id) {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement("SELECT FROM " + table + " WHERE ID=?");
+            statement.setString(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            handleException(e);
+        }
         return false;
     }
 

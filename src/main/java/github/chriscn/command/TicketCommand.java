@@ -22,41 +22,42 @@ public class TicketCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (args.length == 0) {
-                player.sendMessage(ChatColor.RED + "Check your syntax");
-                return false;
-            } else {
-                String option = args[0].toLowerCase(); // create,review,close,list,get
-                if (option.equalsIgnoreCase("create")) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 1; i < args.length; i++) {
-                        sb.append(args[i]).append(" ");
-                    }
-                    String msg = sb.toString().trim();
-
-                    VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
-
-                    plugin.db.createTicket(ticket);
-
-                    // generate ticket
-                    player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
-                    return true;
+        if (plugin.PLUGIN_ENABLED) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                if (args.length == 0) {
+                    player.sendMessage(ChatColor.RED + "Check your syntax");
+                    return false;
                 } else {
-                    String id = args[1].toLowerCase();
+                    String option = args[0].toLowerCase(); // create,review,close,list,get
+                    if (option.equalsIgnoreCase("create")) {
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 1; i < args.length; i++) {
+                            sb.append(args[i]).append(" ");
+                        }
+                        String msg = sb.toString().trim();
 
-                    if (option.equalsIgnoreCase("review")) {
-                        VirtualTicket ticket = plugin.db.getTicket(id);
+                        VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
 
-                        player.sendMessage("ID " + ticket.getID());
-                        player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
-                        player.sendMessage("Player " + ticket.getSenderName());
-                        player.sendMessage("Ticket Message " + ticket.getTicketMessage());
-                        player.sendMessage("Resolved " + ticket.getResolved());
+                        plugin.db.createTicket(ticket);
 
+                        // generate ticket
+                        player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
                         return true;
-                    }/* else if (option.equalsIgnoreCase("close")) {
+                    } else {
+                        String id = args[1].toLowerCase();
+
+                        if (option.equalsIgnoreCase("review")) {
+                            VirtualTicket ticket = plugin.db.getTicket(id);
+
+                            player.sendMessage("ID " + ticket.getID());
+                            player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
+                            player.sendMessage("Player " + ticket.getSenderName());
+                            player.sendMessage("Ticket Message " + ticket.getTicketMessage());
+                            player.sendMessage("Resolved " + ticket.getResolved());
+
+                            return true;
+                        }/* else if (option.equalsIgnoreCase("close")) {
                         // by closing a ticket you are setting it as resolved it doesn't delete it from the mysql system
                         // TODO test to see if the ticket exists before trying to mark it as resolved
 
@@ -86,13 +87,17 @@ public class TicketCommand implements TabExecutor {
                             }
 
                         }*/
+                    }
                 }
+            } else {
+                sender.sendMessage(ChatColor.RED + "Unfortunately, this command can only be used by a Player.");
+                return true;
             }
+            return false;
         } else {
-            sender.sendMessage(ChatColor.RED + "Unfortunately, this command can only be used by a Player.");
+            sender.sendMessage(ChatColor.RED + "Plugin is disabled. Check your config and reload it with /staffchat reload");
             return true;
         }
-        return false;
     }
 
     @Override

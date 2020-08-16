@@ -69,7 +69,7 @@ public class MySQL implements DatabaseManager {
         } catch (SQLException | ClassNotFoundException e) {
             plugin.getLogger().severe("[SQL] Setup Failed with message " + e.getMessage());
             plugin.getLogger().severe("Shutting Down StaffTicket");
-            plugin.getPluginLoader().disablePlugin(plugin);
+            plugin.PLUGIN_ENABLED = false;
         }
     }
 

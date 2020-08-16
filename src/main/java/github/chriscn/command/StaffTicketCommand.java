@@ -27,21 +27,15 @@ public class StaffTicketCommand implements TabExecutor {
             if (firstOption.equalsIgnoreCase("reload")) {
                 sender.sendMessage(ChatColor.GREEN + "Attempting to reload the config.");
 
-                /*plugin.reloadConfig();
-                if (plugin.SUCCESSFUL_CONNECTION) {
-                    try {
-                        plugin.sql.getConnection().close();
-                        sender.sendMessage(ChatColor.GREEN + "Successfully closed the old SQL connection.");
-                    } catch (SQLException e) {
-                        sender.sendMessage(ChatColor.RED + "Failed to close the SQL Connection. Disabling this plugin.");
-                        plugin.getPluginLoader().disablePlugin(plugin);
-                    }
+                plugin.reloadPlugin();
+                
+                sender.sendMessage("Plugin reloaded");
+            } else {
+                if (plugin.PLUGIN_ENABLED) {
+
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Plugin disabled, check your config and use /staffchat reload");
                 }
-
-                plugin.sql = null; // clears the old sql manager
-                plugin.sql = new SQLManager(plugin); // reinitalises the sql manager
-
-                sender.sendMessage(ChatColor.GREEN + "Successfully reloaded!");*/
             }
 
             return true;

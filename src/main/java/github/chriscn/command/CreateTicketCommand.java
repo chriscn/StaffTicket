@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateTicketCommand implements TabExecutor {
+public class CreateTicketCommand implements CommandExecutor {
 
     StaffTicket plugin;
     public CreateTicketCommand(StaffTicket instance) {
@@ -41,18 +41,9 @@ public class CreateTicketCommand implements TabExecutor {
                 player.sendMessage(plugin.NO_PERMISSION);
                 return true;
             }
-
         } else {
             sender.sendMessage(plugin.NOT_PLAYER);
             return true;
         }
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        ArrayList<String> options = new ArrayList<>();
-        options.add("create");
-
-        return options;
     }
 }

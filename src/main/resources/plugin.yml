@@ -6,5 +6,7 @@ load: STARTUP
 commands:
   ticket:
     usage: /ticket
+  createticket:
+    usage: /createticket <message>
   staffticket:
     usage: /staffticket <reload>

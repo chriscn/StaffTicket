@@ -1,9 +1,58 @@
 package github.chriscn.command;
 
 import github.chriscn.StaffTicket;
+import github.chriscn.api.VirtualTicket;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 
-public class CreateTicketCommand implements CommandExecutor {
-    public CreateTicketCommand(StaffTicket staffTicket) {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CreateTicketCommand implements TabExecutor {
+
+    StaffTicket plugin;
+    public CreateTicketCommand(StaffTicket instance) {
+        this.plugin = instance;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (player.hasPermission(plugin.stOpen)) {
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < args.length; i++) {
+                    sb.append(args[i]).append(" ");
+                }
+
+                String msg = sb.toString().trim();
+
+                VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
+
+                plugin.db.createTicket(ticket);
+                player.sendMessage(ChatColor.GREEN + "Generated you a ticket with ID " + ChatColor.YELLOW + ticket.getID());
+                return true;
+            } else {
+                player.sendMessage(plugin.NO_PERMISSION);
+                return true;
+            }
+
+        } else {
+            sender.sendMessage(plugin.NOT_PLAYER);
+            return true;
+        }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        ArrayList<String> options = new ArrayList<>();
+        options.add("create");
+
+        return options;
     }
 }

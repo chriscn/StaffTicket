@@ -28,29 +28,22 @@ public class TicketCommand implements TabExecutor {
                 if (args.length == 0) {
                     player.sendMessage(ChatColor.RED + "Check your syntax");
                     return false;
-                } else {
-                    String option = args[0].toLowerCase(); // create,review,close,list,get
-                    if (option.equalsIgnoreCase("create")) {
-                        if (player.hasPermission(plugin.stOpen)) {
+                } else if (args.length == 1) { // list
+                    String option = args[0].toLowerCase();
 
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 1; i < args.length; i++) {
-                                sb.append(args[i]).append(" ");
-                            }
-                            String msg = sb.toString().trim();
+                    switch (option) {
+                        case "list":
+                            sender.sendMessage(ChatColor.RED + "Implement LIST");
+                            break;
+                        default:
+                            return unknownArgument(player);
+                    }
+                } else if (args.length == 2) { // review,close,get (stuff where you provide an id)
+                    String option = args[0].toLowerCase();
+                    String id = args[1].toLowerCase();
 
-                            VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
-
-                            plugin.db.createTicket(ticket);
-
-                            // generate ticket
-                            player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
-                        } else noPermission(player);
-                        return true;
-                    } else {
-                        String id = args[1].toLowerCase();
-
-                        if (option.equalsIgnoreCase("review")) {
+                    switch (option) {
+                        case "review":
                             if (player.hasPermission(plugin.stReview)) {
 
                                 VirtualTicket ticket = plugin.db.getTicket(id);
@@ -62,24 +55,31 @@ public class TicketCommand implements TabExecutor {
                                 player.sendMessage("Resolved " + ticket.getResolved());
 
                             } else noPermission(player);
-                        } else if (option.equalsIgnoreCase("close") || option.equalsIgnoreCase("resolve")) {
+                        case "close":
+                        case "resolve":
                             if (player.hasPermission(plugin.stClose)) {
                                 plugin.db.resolveTicket(id, true);
                                 player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + id);
 
                             } else noPermission(player);
-                        }
-                        return true;
+                        default:
+                            return unknownArgument(player);
                     }
+
+                } else {
+                    player.sendMessage(ChatColor.RED + "too many arguments");
+                    // you fucked up
                 }
+
             } else {
                 sender.sendMessage(ChatColor.RED + "Unfortunately, this command can only be used by a Player.");
                 return true;
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Plugin is disabled. Check your config and reload it with /staffchat reload");
+            sender.sendMessage(ChatColor.RED + "Plugin is disabled. Check your config and reload it with /staffticket reload");
             return true;
         }
+        return false;
     }
 
     @Override
@@ -97,5 +97,10 @@ public class TicketCommand implements TabExecutor {
 
     private void noPermission(Player player) {
         player.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
+    }
+
+    private boolean unknownArgument(Player player) {
+        player.sendMessage(ChatColor.RED + "Unknown argument");
+        return false;
     }
 }

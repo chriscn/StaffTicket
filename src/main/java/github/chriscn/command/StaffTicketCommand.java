@@ -35,7 +35,7 @@ public class StaffTicketCommand implements TabExecutor {
             } else {
                 if (plugin.PLUGIN_ENABLED) {
                     if (firstOption.equalsIgnoreCase("debug")) {
-                        VirtualTicket ticket = new VirtualTicket(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "");
+                        VirtualTicket ticket = new VirtualTicket(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "This is a debug ticket.");
                         sender.sendMessage("Generated new ticket with id " + ticket.getID());
                         plugin.db.createTicket(ticket);
                         sender.sendMessage("Submitted ticket to database");

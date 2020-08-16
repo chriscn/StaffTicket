@@ -3,7 +3,6 @@ package github.chriscn.command;
 import github.chriscn.StaffTicket;
 import github.chriscn.api.VirtualTicket;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -11,7 +10,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class TicketCommand implements TabExecutor {
 
@@ -38,30 +36,32 @@ public class TicketCommand implements TabExecutor {
                         default:
                             return unknownArgument(player);
                     }
-                } else if (args.length == 2) { // review,close,get (stuff where you provide an id)
+                } else if (args.length == 2) { // review,close (stuff where you provide an id)
                     String option = args[0].toLowerCase();
                     String id = args[1].toLowerCase();
 
                     switch (option) {
                         case "review":
                             if (player.hasPermission(plugin.stReview)) {
+                                if (!plugin.db.ticketExists(id)) {
+                                    player.sendMessage(ChatColor.RED + "Unfortunately the ticket with id, " + ChatColor.YELLOW + id + ChatColor.RED + " does not exist.");
+                                } else {
+                                    VirtualTicket ticket = plugin.db.getTicket(id);
 
-                                VirtualTicket ticket = plugin.db.getTicket(id);
-
-                                player.sendMessage("ID " + ticket.getID());
-                                player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
-                                player.sendMessage("Player " + ticket.getSenderName());
-                                player.sendMessage("Ticket Message " + ticket.getTicketMessage());
-                                player.sendMessage("Resolved " + ticket.getResolved());
-
-                            } else noPermission(player);
+                                    player.sendMessage("ID " + ticket.getID());
+                                    player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
+                                    player.sendMessage("Player " + ticket.getSenderName());
+                                    player.sendMessage("Ticket Message " + ticket.getTicketMessage());
+                                    player.sendMessage("Resolved " + ticket.getResolved());
+                                }
+                            } else player.sendMessage(plugin.NO_PERMISSION);
                         case "close":
                         case "resolve":
                             if (player.hasPermission(plugin.stClose)) {
                                 plugin.db.resolveTicket(id, true);
                                 player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + id);
 
-                            } else noPermission(player);
+                            } else player.sendMessage(plugin.NO_PERMISSION);
                         default:
                             return unknownArgument(player);
                     }
@@ -72,7 +72,7 @@ public class TicketCommand implements TabExecutor {
                 }
 
             } else {
-                sender.sendMessage(ChatColor.RED + "Unfortunately, this command can only be used by a Player.");
+                sender.sendMessage(plugin.NOT_PLAYER);
                 return true;
             }
         } else {
@@ -85,19 +85,17 @@ public class TicketCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            List<String> options = new ArrayList<>();
-            options.add("create");
-            if (sender.hasPermission(plugin.stReview)) {
-                options.add("review");
-            }
-            return options;
+            ArrayList<String> firstArgument = new ArrayList<>();
+
+            if (sender.hasPermission(plugin.stList)) firstArgument.add("list");
+            if (sender.hasPermission(plugin.stReview)) firstArgument.add("review");
+            if (sender.hasPermission(plugin.stClose)) firstArgument.add("resolve");
+
+            return firstArgument;
         }
         return null;
     }
 
-    private void noPermission(Player player) {
-        player.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
-    }
 
     private boolean unknownArgument(Player player) {
         player.sendMessage(ChatColor.RED + "Unknown argument");

@@ -16,6 +16,7 @@ public final class StaffTicket extends JavaPlugin {
 
     public Permission stOpen = new Permission("staffticket.open");
     public Permission stReview = new Permission("staffticket.review");
+    public Permission stList = new Permission("staffticket.list");
     public Permission stClose = new Permission("staffticket.close");
 
     public String NOT_PLAYER = ChatColor.RED + "You must be a player to use this command.";
@@ -55,7 +56,7 @@ public final class StaffTicket extends JavaPlugin {
         // close db connections
         closeConnection();
     }
-     
+
     public void reloadPlugin() {
         closeConnection();
         this.db = null;

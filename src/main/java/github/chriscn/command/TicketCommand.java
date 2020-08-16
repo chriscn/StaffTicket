@@ -61,45 +61,21 @@ public class TicketCommand implements TabExecutor {
                                 player.sendMessage("Ticket Message " + ticket.getTicketMessage());
                                 player.sendMessage("Resolved " + ticket.getResolved());
 
-                                return true;
-                            }/* else if (option.equalsIgnoreCase("close")) {
-                        // by closing a ticket you are setting it as resolved it doesn't delete it from the mysql system
-                        // TODO test to see if the ticket exists before trying to mark it as resolved
+                            } else noPermission(player);
+                        } else if (option.equalsIgnoreCase("close") || option.equalsIgnoreCase("resolve")) {
+                            if (player.hasPermission(plugin.stClose)) {
+                                plugin.db.resolveTicket(id, true);
+                                player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + id);
 
-                        if (plugin.db.ticketExists(id)) {
-                            plugin.db.resolveTicket(id, true);
-                            player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + ChatColor.YELLOW + id);
-                        } else {
-                            player.sendMessage(ChatColor.RED + "I couldn't find that ticket on our system, use " + ChatColor.GREEN + "/ticket list");
+                            } else noPermission(player);
                         }
                         return true;
-                    } else if (option.equalsIgnoreCase("list")) {
-                        String submittedBy = args[2].toLowerCase(); // this doesn't have to be supplied but allows getting
-                        if (submittedBy == "" || submittedBy.isEmpty()) {
-                            plugin.db.getAllTickets().forEach(virtualTicket -> {
-                                player.sendMessage(virtualTicket.getID());
-                            });
-                            // get all unresolved tickets
-                        } else {
-                            if (submittedBy.matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
-                                // they've supplied a uuid for an unknown reason
-                            } else {
-                                UUID uuid = Bukkit.getPlayer(submittedBy).getUniqueId();
-
-                                plugin.db.getAllTickets(uuid).forEach(virtualTicket -> {
-                                    player.sendMessage(virtualTicket.getID());
-                                });
-                            }
-
-                        }*/
-                        } else noPermission(player);
                     }
                 }
             } else {
                 sender.sendMessage(ChatColor.RED + "Unfortunately, this command can only be used by a Player.");
                 return true;
             }
-            return false;
         } else {
             sender.sendMessage(ChatColor.RED + "Plugin is disabled. Check your config and reload it with /staffchat reload");
             return true;

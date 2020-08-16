@@ -1,15 +1,11 @@
 package github.chriscn.command;
 
 import github.chriscn.StaffTicket;
-import github.chriscn.api.SQLManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +27,7 @@ public class StaffTicketCommand implements TabExecutor {
             if (firstOption.equalsIgnoreCase("reload")) {
                 sender.sendMessage(ChatColor.GREEN + "Attempting to reload the config.");
 
-                plugin.reloadConfig();
+                /*plugin.reloadConfig();
                 if (plugin.SUCCESSFUL_CONNECTION) {
                     try {
                         plugin.sql.getConnection().close();
@@ -45,19 +41,7 @@ public class StaffTicketCommand implements TabExecutor {
                 plugin.sql = null; // clears the old sql manager
                 plugin.sql = new SQLManager(plugin); // reinitalises the sql manager
 
-                sender.sendMessage(ChatColor.GREEN + "Successfully reloaded!");
-            } else if (firstOption.equalsIgnoreCase("status")) {
-                try {
-                    if(plugin.sql.getConnection().isValid(30)) {
-
-                    } else {
-
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }  else {
-                return false;
+                sender.sendMessage(ChatColor.GREEN + "Successfully reloaded!");*/
             }
 
             return true;

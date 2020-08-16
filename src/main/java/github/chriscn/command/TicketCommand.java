@@ -38,7 +38,7 @@ public class TicketCommand implements TabExecutor {
 
                     VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), msg);
 
-                    plugin.sql.submitTicket(ticket);
+                    plugin.db.createTicket(ticket);
 
                     // generate ticket
                     player.sendMessage(ChatColor.GREEN + "Generated ticket with ID: " + ChatColor.YELLOW + ticket.getID());
@@ -47,7 +47,7 @@ public class TicketCommand implements TabExecutor {
                     String id = args[1].toLowerCase();
 
                     if (option.equalsIgnoreCase("review")) {
-                        VirtualTicket ticket = plugin.sql.getVirtualTicket(id);
+                        VirtualTicket ticket = plugin.db.getTicket(id);
 
                         player.sendMessage("ID " + ticket.getID());
                         player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
@@ -56,11 +56,12 @@ public class TicketCommand implements TabExecutor {
                         player.sendMessage("Resolved " + ticket.getResolved());
 
                         return true;
-                    } else if (option.equalsIgnoreCase("close")) {
+                    }/* else if (option.equalsIgnoreCase("close")) {
                         // by closing a ticket you are setting it as resolved it doesn't delete it from the mysql system
                         // TODO test to see if the ticket exists before trying to mark it as resolved
-                        if (plugin.sql.ticketExists(id)) {
-                            plugin.sql.resolveTicket(id, true);
+
+                        if (plugin.db.ticketExists(id)) {
+                            plugin.db.resolveTicket(id, true);
                             player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + ChatColor.YELLOW + id);
                         } else {
                             player.sendMessage(ChatColor.RED + "I couldn't find that ticket on our system, use " + ChatColor.GREEN + "/ticket list");
@@ -69,7 +70,7 @@ public class TicketCommand implements TabExecutor {
                     } else if (option.equalsIgnoreCase("list")) {
                         String submittedBy = args[2].toLowerCase(); // this doesn't have to be supplied but allows getting
                         if (submittedBy == "" || submittedBy.isEmpty()) {
-                            plugin.sql.getAllTickets().forEach(virtualTicket -> {
+                            plugin.db.getAllTickets().forEach(virtualTicket -> {
                                 player.sendMessage(virtualTicket.getID());
                             });
                             // get all unresolved tickets
@@ -79,17 +80,12 @@ public class TicketCommand implements TabExecutor {
                             } else {
                                 UUID uuid = Bukkit.getPlayer(submittedBy).getUniqueId();
 
-                                plugin.sql.getAllTickets(uuid).forEach(virtualTicket -> {
+                                plugin.db.getAllTickets(uuid).forEach(virtualTicket -> {
                                     player.sendMessage(virtualTicket.getID());
                                 });
                             }
 
-                        }
-                    } else {
-                        player.sendMessage("unknown argument");
-                        // unknown option
-                        return false;
-                    }
+                        }*/
                 }
             }
         } else {

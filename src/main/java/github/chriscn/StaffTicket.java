@@ -1,13 +1,12 @@
 package github.chriscn;
 
-import github.chriscn.api.SQLManager;
+import github.chriscn.database.DatabaseManager;
+import github.chriscn.database.MySQL;
 import github.chriscn.command.StaffTicketCommand;
 import github.chriscn.command.TicketCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.sql.SQLException;
 
 public final class StaffTicket extends JavaPlugin {
 
@@ -17,8 +16,9 @@ public final class StaffTicket extends JavaPlugin {
 
     public final int ID_LENGTH = 8;
 
-    public SQLManager sql;
     public boolean SUCCESSFUL_CONNECTION;
+
+    public DatabaseManager db;
 
     @Override
     public void onEnable() {
@@ -29,11 +29,19 @@ public final class StaffTicket extends JavaPlugin {
 
         getConfig().options().copyDefaults(true);
         saveConfig();
-
-        this.sql = new SQLManager(this);
-
+        
         getCommand("ticket").setExecutor(new TicketCommand(this));
         getCommand("staffticket").setExecutor(new StaffTicketCommand(this));
+
+        switch (getConfig().getString("storage-method").toLowerCase()) {
+            case "mysql":
+                this.db = new MySQL(this);
+                break;
+            default:
+                getLogger().info("Unknown storage method type: " + getConfig().getString("storage-method").toLowerCase());
+                getLogger().info("Disabling plugin.");
+                getPluginLoader().disablePlugin(this);
+        }
     }
 
     @Override
@@ -42,8 +50,8 @@ public final class StaffTicket extends JavaPlugin {
         // close db connections
         if (SUCCESSFUL_CONNECTION) {
             try {
-                sql.getConnection().close();
-            } catch (SQLException e) {
+                db.closeConnection();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

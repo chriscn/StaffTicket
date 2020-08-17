@@ -27,7 +27,7 @@ public class StaffTicketCommand implements TabExecutor {
 
         if (Arrays.asList(args).contains(firstOption)) {
             if (firstOption.equalsIgnoreCase("reload")) {
-                sender.sendMessage(ChatColor.GREEN + "Attempting to reload the config.");
+                sender.sendMessage(ChatColor.GREEN + "Attempting to reload the plugin.");
 
                 plugin.reloadPlugin();
 

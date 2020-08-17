@@ -194,6 +194,33 @@ public class MySQL implements DatabaseManager {
         return tickets;
     }
 
+    @Override
+    public ArrayList<VirtualTicket> getResolvedTickets(boolean resolved) {
+        ArrayList<VirtualTicket> tickets = new ArrayList<>();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE RESOLVED=?");
+            statement.setBoolean(1, resolved);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tickets.add(new VirtualTicket(
+                        resultSet.getString("ID"),
+                        resultSet.getLong("TIMESTAMP"),
+                        resultSet.getString("UUID"),
+                        resultSet.getString("MESSAGE"),
+                        resultSet.getBoolean("RESOLVED")
+                ));
+            }
+
+        }  catch (SQLException e) {
+            handleException(e);
+        }
+
+        return tickets;
+    }
+
     private void handleException(SQLException e) {
         Bukkit.getLogger().info("[MYSQL] Error: " + e.getMessage());
     }

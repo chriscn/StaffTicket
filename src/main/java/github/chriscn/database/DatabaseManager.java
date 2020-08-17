@@ -14,4 +14,5 @@ public interface DatabaseManager {
     VirtualTicket getTicket(String id);
 
     ArrayList<VirtualTicket> getAllTickets();
+    ArrayList<VirtualTicket> getResolvedTickets(boolean resolved);
 }

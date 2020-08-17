@@ -29,13 +29,13 @@ public class TicketCommand implements TabExecutor {
                 } else if (args.length == 1) { // list
                     String option = args[0].toLowerCase();
 
-                    switch (option) {
-                        case "list":
-                            sender.sendMessage(ChatColor.RED + "Implement LIST");
-                            break;
-                        default:
-                            return unknownArgument(player);
+                    if (option.equalsIgnoreCase("list")) {
+                        sender.sendMessage(ChatColor.RED + "Implement LIST");
+                    } else {
+                        return unknownArgument(player);
                     }
+
+                    return true;
                 } else if (args.length == 2) { // review,close (stuff where you provide an id)
                     String option = args[0].toLowerCase();
                     String id = args[1].toLowerCase();
@@ -55,6 +55,7 @@ public class TicketCommand implements TabExecutor {
                                     player.sendMessage("Resolved " + ticket.getResolved());
                                 }
                             } else player.sendMessage(plugin.NO_PERMISSION);
+                            break;
                         case "close":
                         case "resolve":
                             if (player.hasPermission(plugin.stClose)) {
@@ -62,10 +63,11 @@ public class TicketCommand implements TabExecutor {
                                 player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + id);
 
                             } else player.sendMessage(plugin.NO_PERMISSION);
+                            break;
                         default:
                             return unknownArgument(player);
                     }
-
+                    return true;
                 } else {
                     player.sendMessage(ChatColor.RED + "too many arguments");
                     // you fucked up
@@ -92,6 +94,16 @@ public class TicketCommand implements TabExecutor {
             if (sender.hasPermission(plugin.stClose)) firstArgument.add("resolve");
 
             return firstArgument;
+        } else if (args.length == 2) {
+            ArrayList<String> ticketID = new ArrayList<>();
+
+            // contact database and get all tickets
+
+            for (VirtualTicket ticket : plugin.tickets) {
+                ticketID.add(ticket.getID());
+            }
+
+            return ticketID;
         }
         return null;
     }

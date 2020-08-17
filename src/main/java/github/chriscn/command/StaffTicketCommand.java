@@ -45,16 +45,20 @@ public class StaffTicketCommand implements TabExecutor {
                         sender.sendMessage(
                                         dbTicket.getID() + "\n" +
                                         dbTicket.getTicketMessage() + "\n" +
-                                        dbTicket.getSenderName() + "\n" +
+                     //                   dbTicket.getSenderName() + "\n" +
                                         dbTicket.getISO8601() + "\n" +
-                                                dbTicket.getResolved()
-
+                                        dbTicket.getResolved()
                                 );
 
                         sender.sendMessage("Resolving this ticket");
                         plugin.db.resolveTicket(dbTicket.getID(), true);
 
                         sender.sendMessage("Does this ticket exist (true) " + plugin.db.ticketExists(ticket.getID()));
+
+                        sender.sendMessage("Getting all tickets");
+                        for (VirtualTicket alltickets : plugin.db.getAllTickets()) {
+                            sender.sendMessage(alltickets.getID());
+                        }
                         return true;
 
                     }

@@ -6,11 +6,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CreateTicketCommand implements CommandExecutor {
 
@@ -36,14 +32,15 @@ public class CreateTicketCommand implements CommandExecutor {
 
                 plugin.db.createTicket(ticket);
                 player.sendMessage(ChatColor.GREEN + "Generated you a ticket with ID " + ChatColor.YELLOW + ticket.getID());
-                return true;
+
+                plugin.tickets.add(ticket);
+
             } else {
                 player.sendMessage(plugin.NO_PERMISSION);
-                return true;
             }
         } else {
             sender.sendMessage(plugin.NOT_PLAYER);
-            return true;
         }
+        return true;
     }
 }

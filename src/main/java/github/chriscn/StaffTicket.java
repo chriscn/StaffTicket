@@ -54,10 +54,8 @@ public final class StaffTicket extends JavaPlugin {
 
         setupStorageMethod();
 
-        if (this.PLUGIN_ENABLED) {
-            // fetch tickets from database
-            this.tickets = this.db.getAllTickets();
-        }
+        // fetch tickets from database
+        if (this.PLUGIN_ENABLED) this.tickets = this.db.getAllTickets();
     }
 
     @Override

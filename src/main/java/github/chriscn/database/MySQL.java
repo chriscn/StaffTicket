@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class MySQL implements DatabaseManager {
 
@@ -165,6 +166,32 @@ public class MySQL implements DatabaseManager {
             handleException(e);
         }
         return null;
+    }
+
+    @Override
+    public ArrayList<VirtualTicket> getAllTickets() {
+        ArrayList<VirtualTicket> tickets = new ArrayList<>();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tickets.add(new VirtualTicket(
+                        resultSet.getString("ID"),
+                        resultSet.getLong("TIMESTAMP"),
+                        resultSet.getString("UUID"),
+                        resultSet.getString("MESSAGE"),
+                        resultSet.getBoolean("RESOLVED")
+                ));
+            }
+
+        }  catch (SQLException e) {
+            handleException(e);
+        }
+
+        return tickets;
     }
 
     private void handleException(SQLException e) {

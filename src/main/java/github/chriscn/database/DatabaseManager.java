@@ -2,7 +2,7 @@ package github.chriscn.database;
 
 import github.chriscn.api.VirtualTicket;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface DatabaseManager {
     void closeConnection();
@@ -12,4 +12,6 @@ public interface DatabaseManager {
 
     boolean ticketExists(String id);
     VirtualTicket getTicket(String id);
+
+    ArrayList<VirtualTicket> getAllTickets();
 }

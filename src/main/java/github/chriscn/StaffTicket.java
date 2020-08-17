@@ -1,5 +1,6 @@
 package github.chriscn;
 
+import github.chriscn.api.VirtualTicket;
 import github.chriscn.command.CreateTicketCommand;
 import github.chriscn.database.DatabaseManager;
 import github.chriscn.database.MySQL;
@@ -11,6 +12,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 
 public final class StaffTicket extends JavaPlugin {
 
@@ -30,6 +33,8 @@ public final class StaffTicket extends JavaPlugin {
     public DatabaseManager db;
     public FileConfiguration config;
 
+    public ArrayList<VirtualTicket> tickets = new ArrayList<>();
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -48,6 +53,11 @@ public final class StaffTicket extends JavaPlugin {
         getCommand("staffticket").setExecutor(new StaffTicketCommand(this));
 
         setupStorageMethod();
+
+        if (this.PLUGIN_ENABLED) {
+            // fetch tickets from database
+            this.tickets = this.db.getAllTickets();
+        }
     }
 
     @Override
@@ -65,6 +75,9 @@ public final class StaffTicket extends JavaPlugin {
         this.config = this.getConfig(); // refresh the config
 
         setupStorageMethod();
+
+        this.tickets = null;
+        if(this.PLUGIN_ENABLED) this.tickets = this.db.getAllTickets();
     }
 
     private void setupStorageMethod() {

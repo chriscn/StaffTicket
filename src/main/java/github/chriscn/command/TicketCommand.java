@@ -49,7 +49,7 @@ public class TicketCommand implements TabExecutor {
                                     VirtualTicket ticket = plugin.db.getTicket(id);
 
                                     player.sendMessage("ID " + ticket.getID());
-                                    player.sendMessage("Timestamp " + ticket.getISO8601() + " Unix Time " + ticket.getTimestamp());
+                                    player.sendMessage("Timestamp " + ticket.getISO8601());
                                     player.sendMessage("Player " + ticket.getSenderName());
                                     player.sendMessage("Ticket Message " + ticket.getTicketMessage());
                                     player.sendMessage("Resolved " + ticket.getResolved());

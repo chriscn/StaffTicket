@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import github.chriscn.StaffTicket;
 import github.chriscn.api.VirtualTicket;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,8 +16,6 @@ public class HikariCP implements DatabaseManager {
     StaffTicket plugin;
     public HikariCP(StaffTicket instance) {
         this.plugin = instance;
-
-        plugin.SUCCESSFUL_CONNECTION = false;
 
         this.hikari = new HikariDataSource();
 
@@ -34,7 +31,6 @@ public class HikariCP implements DatabaseManager {
             Statement statement = connection.createStatement();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + plugin.table + "(ID varchar(" + 8 + "), TIMESTAMP bigint(20), UUID varchar(36), MESSAGE text, RESOLVED tinyint(1))");
 
-            plugin.SUCCESSFUL_CONNECTION = true;
             plugin.PLUGIN_ENABLED = true;
         } catch (SQLException e) {
             e.printStackTrace();

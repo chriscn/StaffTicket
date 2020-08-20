@@ -17,8 +17,6 @@ public class MySQL implements DatabaseManager {
     public MySQL(StaffTicket instance) {
         this.plugin = instance;
 
-        plugin.SUCCESSFUL_CONNECTION = false;
-
         try {
             synchronized (this) {
                 if (connection != null && !connection.isClosed()) {
@@ -29,7 +27,6 @@ public class MySQL implements DatabaseManager {
                 this.connection = DriverManager.getConnection("jdbc:mysql://" + plugin.host + ":" + plugin.port + "/" + plugin.database, plugin.username, plugin.password);
 
                 plugin.getLogger().info("Successfully connected to the MySQL Database.");
-                plugin.SUCCESSFUL_CONNECTION = true;
                 plugin.PLUGIN_ENABLED = true;
             }
 

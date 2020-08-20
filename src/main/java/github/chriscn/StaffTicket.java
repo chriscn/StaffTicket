@@ -28,7 +28,6 @@ public final class StaffTicket extends JavaPlugin {
 
     public static final int ID_LENGTH = 8;
 
-    public boolean SUCCESSFUL_CONNECTION;
     public boolean PLUGIN_ENABLED;
 
     public DatabaseManager db;
@@ -115,7 +114,7 @@ public final class StaffTicket extends JavaPlugin {
     }
 
     private void closeConnection() {
-        if (SUCCESSFUL_CONNECTION) {
+        if (PLUGIN_ENABLED) {
             try {
                 db.closeConnection();
             } catch (Exception e) {

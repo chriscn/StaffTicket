@@ -25,7 +25,7 @@ public final class StaffTicket extends JavaPlugin {
     public String NOT_PLAYER = ChatColor.RED + "You must be a player to use this command.";
     public String NO_PERMISSION = ChatColor.RED + "You do not have permission to use this command";
 
-    public final int ID_LENGTH = 8;
+    public static final int ID_LENGTH = 8;
 
     public boolean SUCCESSFUL_CONNECTION;
     public boolean PLUGIN_ENABLED;

@@ -8,6 +8,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.sql.*;
 import java.util.ArrayList;
 
+import static github.chriscn.StaffTicket.ID_LENGTH;
+
 public class MySQL implements DatabaseManager {
 
     private final String host;
@@ -54,7 +56,7 @@ public class MySQL implements DatabaseManager {
                     // CREATE TABLE `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
                     //  connection.prepareStatement("CREATE TABLE ")
                     PreparedStatement generateTable = connection.prepareStatement(
-                            "CREATE TABLE " + this.database + "." + this.table + " ( `ID` VARCHAR(" + 8 + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
+                            "CREATE TABLE " + this.database + "." + this.table + " ( `ID` VARCHAR(" + ID_LENGTH + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
                     );
 
                     generateTable.executeUpdate();
@@ -179,7 +181,7 @@ public class MySQL implements DatabaseManager {
 
             while (resultSet.next()) {
                 tickets.add(new VirtualTicket(
-                        resultSet.getString("ID"),
+                        resultSet.getString("ID").toUpperCase(),
                         resultSet.getLong("TIMESTAMP"),
                         resultSet.getString("UUID"),
                         resultSet.getString("MESSAGE"),

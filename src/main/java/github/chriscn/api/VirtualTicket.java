@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.util.Random;
 import java.util.UUID;
 
+import static github.chriscn.StaffTicket.ID_LENGTH;
+
 public class VirtualTicket {
 
     private final String id;
@@ -14,8 +16,6 @@ public class VirtualTicket {
     private final UUID uuid;
     private final String ticketMessage;
     private final boolean resolved;
-
-    public final int ID_LENGTH = 8;
 
     /**
      * Generates a new VirtualTicket with a unique ID and the current unix timestamp when called.

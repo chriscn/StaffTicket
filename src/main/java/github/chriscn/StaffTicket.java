@@ -57,13 +57,10 @@ public final class StaffTicket extends JavaPlugin {
         // fetch tickets from database
         if (this.PLUGIN_ENABLED) this.tickets = this.db.getAllTickets();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                tickets = null;
-                if (PLUGIN_ENABLED) tickets = db.getAllTickets();
-            }
-        }, 0L, config.getInt("refresh-time"));
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            tickets = null;
+            if (PLUGIN_ENABLED) tickets = db.getAllTickets();
+        }, 0L, config.getInt("refresh-time") * 20);
     }
 
     @Override

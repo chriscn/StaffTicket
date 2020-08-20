@@ -3,6 +3,7 @@ package github.chriscn;
 import github.chriscn.api.VirtualTicket;
 import github.chriscn.command.CreateTicketCommand;
 import github.chriscn.database.DatabaseManager;
+import github.chriscn.database.HikariCP;
 import github.chriscn.database.MySQL;
 import github.chriscn.command.StaffTicketCommand;
 import github.chriscn.command.TicketCommand;
@@ -102,6 +103,9 @@ public final class StaffTicket extends JavaPlugin {
         switch (storageMethod) {
             case "mysql":
                 this.db = new MySQL(this);
+                break;
+            case "hikaricp":
+                this.db = new HikariCP(this);
                 break;
             default:
                 getLogger().info("Unknown storage-method, " + storageMethod + ", check your configuration file.");

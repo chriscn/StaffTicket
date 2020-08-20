@@ -1,13 +1,10 @@
 # StaffTicket
 verbose: false
-# Database
-# Current options are: mysql
 storage-method: mysql
 refresh-time: 600 # how often should the local cache be updated
-
 database:
   address: localhost
   port: 3306
   database: minecraft
-  username:
+  username: ''
   password: ''

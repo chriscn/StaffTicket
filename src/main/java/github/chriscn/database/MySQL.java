@@ -3,7 +3,6 @@ package github.chriscn.database;
 import github.chriscn.StaffTicket;
 import github.chriscn.api.VirtualTicket;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,30 +11,13 @@ import static github.chriscn.StaffTicket.ID_LENGTH;
 
 public class MySQL implements DatabaseManager {
 
-    private final String host;
-    private final String database;
-    private final String username;
-    private final String password;
-    private final int port;
-    private final String table;
-
     private Connection connection;
-    private final FileConfiguration config;
     private final StaffTicket plugin;
 
     public MySQL(StaffTicket instance) {
         this.plugin = instance;
-        this.config = plugin.getConfig();
 
         plugin.SUCCESSFUL_CONNECTION = false;
-
-        this.host = config.getString("database.address");
-        this.port = config.getInt("database.port");
-        this.database = config.getString("database.database");
-        this.username = config.getString("database.username");
-        this.password = config.getString("database.password");
-
-        this.table = "staffticket";
 
         try {
             synchronized (this) {
@@ -44,29 +26,29 @@ public class MySQL implements DatabaseManager {
                 }
 
                 Class.forName("com.mysql.jdbc.Driver");
-                this.connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
+                this.connection = DriverManager.getConnection("jdbc:mysql://" + plugin.host + ":" + plugin.port + "/" + plugin.database, plugin.username, plugin.password);
 
                 plugin.getLogger().info("Successfully connected to the MySQL Database.");
                 plugin.SUCCESSFUL_CONNECTION = true;
                 plugin.PLUGIN_ENABLED = true;
             }
 
-            if (!tableExists(table)) {
+            if (!tableExists(plugin.table)) {
                 try {
-                    // CREATE TABLE `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
-                    //  connection.prepareStatement("CREATE TABLE ")
+                    // CREATE plugin.table `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
+                    //  connection.prepareStatement("CREATE plugin.table ")
                     PreparedStatement generateTable = connection.prepareStatement(
-                            "CREATE TABLE " + this.database + "." + this.table + " ( `ID` VARCHAR(" + ID_LENGTH + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
+                            "CREATE plugin.table " + plugin.database + "." + plugin.table + " ( `ID` VARCHAR(" + ID_LENGTH + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
                     );
 
                     generateTable.executeUpdate();
 
-                    plugin.getLogger().info("Generated StaffTicket table.");
+                    plugin.getLogger().info("Generated StaffTicket plugin.table.");
                 } catch (SQLException e) {
                     handleException(e);
                 }
             } else {
-                plugin.getLogger().info("StaffTicket table already existed.");
+                plugin.getLogger().info("StaffTicket plugin.table already existed.");
             }
         } catch (SQLException | ClassNotFoundException e) {
             plugin.getLogger().severe("[SQL] Setup Failed with message " + e.getMessage());
@@ -103,7 +85,7 @@ public class MySQL implements DatabaseManager {
     @Override
     public void createTicket(VirtualTicket ticket) {
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + table + " (ID,TIMESTAMP,UUID,MESSAGE,RESOLVED) VALUES (?,?,?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + plugin.table + " (ID,TIMESTAMP,UUID,MESSAGE,RESOLVED) VALUES (?,?,?,?,?)");
 
             statement.setString(1, ticket.getID());
             statement.setLong(2, ticket.getTimestamp());
@@ -120,7 +102,7 @@ public class MySQL implements DatabaseManager {
     @Override
     public void resolveTicket(String id, boolean resolved) {
         try {
-            PreparedStatement update = connection.prepareStatement("UPDATE " + table + " SET RESOLVED=? WHERE ID=?");
+            PreparedStatement update = connection.prepareStatement("UPDATE " + plugin.table + " SET RESOLVED=? WHERE ID=?");
             update.setBoolean(1, resolved);
             update.setString(2, id);
 
@@ -134,7 +116,7 @@ public class MySQL implements DatabaseManager {
     public boolean ticketExists(String id) {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE ID=?");
+            statement = connection.prepareStatement("SELECT * FROM " + plugin.table + " WHERE ID=?");
             statement.setString(1, id);
 
             ResultSet resultSet = statement.executeQuery();
@@ -151,7 +133,7 @@ public class MySQL implements DatabaseManager {
     @Override
     public VirtualTicket getTicket(String id) {
         try {
-            PreparedStatement ticket = connection.prepareStatement("SELECT * FROM " + table + " WHERE ID=?");
+            PreparedStatement ticket = connection.prepareStatement("SELECT * FROM " + plugin.table + " WHERE ID=?");
             ticket.setString(1, id);
 
             ResultSet resultSet = ticket.executeQuery();
@@ -175,7 +157,7 @@ public class MySQL implements DatabaseManager {
         ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.table);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -201,7 +183,7 @@ public class MySQL implements DatabaseManager {
         ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE RESOLVED=?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.table + " WHERE RESOLVED=?");
             statement.setBoolean(1, resolved);
 
             ResultSet resultSet = statement.executeQuery();

@@ -13,42 +13,26 @@ public class HikariCP implements DatabaseManager {
 
     private HikariDataSource hikari;
     private Connection connection;
-    private FileConfiguration config;
-
-    private final String host;
-    private final String database;
-    private final String username;
-    private final String password;
-    private final int port;
-    private final String table;
 
     StaffTicket plugin;
     public HikariCP(StaffTicket instance) {
         this.plugin = instance;
-        this.config = plugin.getConfig();
 
         plugin.SUCCESSFUL_CONNECTION = false;
-
-        this.host = config.getString("database.address");
-        this.port = config.getInt("database.port");
-        this.database = config.getString("database.database");
-        this.username = config.getString("database.username");
-        this.password = config.getString("database.password");
-        this.table = "staffticket";
 
         this.hikari = new HikariDataSource();
 
         hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        hikari.addDataSourceProperty("serverName", host);
-        hikari.addDataSourceProperty("port", port);
-        hikari.addDataSourceProperty("databaseName", database);
-        hikari.addDataSourceProperty("user", username);
-        hikari.addDataSourceProperty("password", password);
+        hikari.addDataSourceProperty("serverName", plugin.host);
+        hikari.addDataSourceProperty("port", plugin.port);
+        hikari.addDataSourceProperty("databaseName", plugin.database);
+        hikari.addDataSourceProperty("user", plugin.username);
+        hikari.addDataSourceProperty("password", plugin.password);
 
         try {
             this.connection = hikari.getConnection();
             Statement statement = connection.createStatement();
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + table + "(ID varchar(" + 8 + "), TIMESTAMP bigint(20), UUID varchar(36), MESSAGE text, RESOLVED tinyint(1))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + plugin.table + "(ID varchar(" + 8 + "), TIMESTAMP bigint(20), UUID varchar(36), MESSAGE text, RESOLVED tinyint(1))");
 
             plugin.SUCCESSFUL_CONNECTION = true;
             plugin.PLUGIN_ENABLED = true;
@@ -71,7 +55,7 @@ public class HikariCP implements DatabaseManager {
             @Override
             public void run() {
                 try {
-                    PreparedStatement statement = connection.prepareStatement("INSERT INTO " + table + " (ID,TIMESTAMP,UUID,MESSAGE,RESOLVED) VALUES (?,?,?,?,?)");
+                    PreparedStatement statement = connection.prepareStatement("INSERT INTO " + plugin.table + " (ID,TIMESTAMP,UUID,MESSAGE,RESOLVED) VALUES (?,?,?,?,?)");
 
                     statement.setString(1, ticket.getID());
                     statement.setLong(2, ticket.getTimestamp());
@@ -93,7 +77,7 @@ public class HikariCP implements DatabaseManager {
             @Override
             public void run() {
                 try {
-                    PreparedStatement update = connection.prepareStatement("UPDATE " + table + " SET RESOLVED=? WHERE ID=?");
+                    PreparedStatement update = connection.prepareStatement("UPDATE " + plugin.table + " SET RESOLVED=? WHERE ID=?");
                     update.setBoolean(1, resolved);
                     update.setString(2, id);
 
@@ -108,7 +92,7 @@ public class HikariCP implements DatabaseManager {
     @Override
     public boolean ticketExists(String id) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE ID=?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.table + " WHERE ID=?");
             statement.setString(1, id);
 
             ResultSet resultSet = statement.executeQuery();
@@ -126,7 +110,7 @@ public class HikariCP implements DatabaseManager {
     public VirtualTicket getTicket(String id) {
         // TODO check local cache first!
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE ID=?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.table + " WHERE ID=?");
             statement.setString(1, id);
 
             ResultSet resultSet = statement.executeQuery();
@@ -150,7 +134,7 @@ public class HikariCP implements DatabaseManager {
         ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.table);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -176,7 +160,7 @@ public class HikariCP implements DatabaseManager {
         ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE RESOLVED=?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.table + " WHERE RESOLVED=?");
             statement.setBoolean(1, resolved);
 
             ResultSet resultSet = statement.executeQuery();

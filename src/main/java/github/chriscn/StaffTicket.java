@@ -35,6 +35,13 @@ public final class StaffTicket extends JavaPlugin {
 
     public ArrayList<VirtualTicket> tickets = new ArrayList<>();
 
+    public String host;
+    public int port;
+    public String database;
+    public String username;
+    public String password;
+    public String table;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -85,6 +92,12 @@ public final class StaffTicket extends JavaPlugin {
 
     private void setupStorageMethod() {
         String storageMethod = config.getString("storage-method").toLowerCase();
+        this.host = config.getString("database.address");
+        this.port = config.getInt("database.port");
+        this.database = config.getString("database.database");
+        this.username = config.getString("database.username");
+        this.password = config.getString("database.password");
+        this.table = "staffticket";
 
         switch (storageMethod) {
             case "mysql":

@@ -1,5 +1,6 @@
 package github.chriscn;
 
+import github.chriscn.api.AssignableGroup;
 import github.chriscn.api.VirtualTicket;
 import github.chriscn.command.CreateTicketCommand;
 import github.chriscn.database.DatabaseManager;
@@ -15,6 +16,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class StaffTicket extends JavaPlugin {
 
@@ -34,6 +36,7 @@ public final class StaffTicket extends JavaPlugin {
     public FileConfiguration config;
 
     public ArrayList<VirtualTicket> tickets = new ArrayList<>();
+    public HashMap<String, AssignableGroup> groups = new HashMap<>();
 
     public String host;
     public int port;
@@ -52,14 +55,11 @@ public final class StaffTicket extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
-        this.config = getConfig();
-        this.PLUGIN_ENABLED = true;
-        
         getCommand("ticket").setExecutor(new TicketCommand(this));
         getCommand("createticket").setExecutor(new CreateTicketCommand(this));
         getCommand("staffticket").setExecutor(new StaffTicketCommand(this));
 
-        setupStorageMethod();
+        reloadPlugin();
 
         // fetch tickets from database
         if (this.PLUGIN_ENABLED) this.tickets = this.db.getAllTickets();

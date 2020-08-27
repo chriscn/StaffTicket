@@ -85,7 +85,7 @@ public class MySQL implements DatabaseManager {
 
     @Override
     public boolean ticketExists(String id) {
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         try {
             statement = connection.prepareStatement("SELECT * FROM " + plugin.table + " WHERE ID=?");
             statement.setString(1, id);

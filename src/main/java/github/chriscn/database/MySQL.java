@@ -7,8 +7,6 @@ import org.bukkit.Bukkit;
 import java.sql.*;
 import java.util.ArrayList;
 
-import static github.chriscn.StaffTicket.ID_LENGTH;
-
 public class MySQL implements DatabaseManager {
 
     private Connection connection;
@@ -30,44 +28,20 @@ public class MySQL implements DatabaseManager {
                 plugin.PLUGIN_ENABLED = true;
             }
 
-            if (!tableExists(plugin.table)) {
-                try {
-                    // CREATE plugin.table `minecraft`.`staffticket` ( `ID` VARCHAR(10) NOT NULL , `TIMESTAMP` INT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;
-                    //  connection.prepareStatement("CREATE plugin.table ")
-                    PreparedStatement generateTable = connection.prepareStatement(
-                            "CREATE plugin.table " + plugin.database + "." + plugin.table + " ( `ID` VARCHAR(" + ID_LENGTH + ") NOT NULL , `TIMESTAMP` BIGINT NOT NULL , `UUID` VARCHAR(36) NOT NULL , `MESSAGE` TEXT NOT NULL , `RESOLVED` BOOLEAN NOT NULL ) ENGINE = InnoDB;"
-                    );
+            try {
+                Statement statement = connection.createStatement();
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + plugin.table + "(ID varchar(" + StaffTicket.ID_LENGTH + "), TIMESTAMP bigint(20), UUID varchar(36), MESSAGE text, RESOLVED tinyint(1))");
 
-                    generateTable.executeUpdate();
-
-                    plugin.getLogger().info("Generated StaffTicket plugin.table.");
-                } catch (SQLException e) {
-                    handleException(e);
-                }
-            } else {
-                plugin.getLogger().info("StaffTicket plugin.table already existed.");
+                plugin.PLUGIN_ENABLED = true;
+                plugin.getLogger().info("[SQL] Created StaffTicket table if it didn't exist.");
+            } catch (SQLException e) {
+                handleException(e);
             }
         } catch (SQLException | ClassNotFoundException e) {
-            plugin.getLogger().severe("[SQL] Setup Failed with message " + e.getMessage());
+            plugin.getLogger().severe("[SQL] Setup Failed with message: " + e.getMessage());
             e.printStackTrace();
             plugin.PLUGIN_ENABLED = false;
         }
-    }
-
-    private boolean tableExists(String tableName) {
-        boolean tExists = false;
-        try (ResultSet rs = connection.getMetaData().getTables(null, null, tableName, null)) {
-            while (rs.next()) {
-                String tName = rs.getString("TABLE_NAME");
-                if (tName != null && tName.equals(tableName)) {
-                    tExists = true;
-                    break;
-                }
-            }
-        } catch (SQLException e) {
-            handleException(e);
-        }
-        return tExists;
     }
 
     @Override
@@ -203,6 +177,6 @@ public class MySQL implements DatabaseManager {
     }
 
     private void handleException(SQLException e) {
-        Bukkit.getLogger().info("[MYSQL] Error: " + e.getMessage());
+        Bukkit.getLogger().info("[SQL] Error: " + e.getMessage());
     }
 }

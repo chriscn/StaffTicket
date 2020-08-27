@@ -108,7 +108,7 @@ public final class StaffTicket extends JavaPlugin {
                 break;
             default:
                 getLogger().info("Unknown storage-method, " + storageMethod + ", check your configuration file.");
-                getLogger().info("Soft disabling the plugin.");
+                getLogger().info("Soft disabling the plugin. Once you've updated your config run /st reload");
                 this.PLUGIN_ENABLED = false;
         }
     }

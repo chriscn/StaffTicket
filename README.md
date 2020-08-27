@@ -7,4 +7,3 @@ Allows your users to submit tickets of bug reports, hacking, etc
 ## Notes
 - You can't delete a ticket, only marking them as resolved.
 - All tickets will have a 8 character unique id: `H8AZ2E3U` 
-

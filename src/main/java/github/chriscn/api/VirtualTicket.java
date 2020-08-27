@@ -1,13 +1,12 @@
 package github.chriscn.api;
 
+import github.chriscn.StaffTicket;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.time.Instant;
 import java.util.Random;
 import java.util.UUID;
-
-import static github.chriscn.StaffTicket.ID_LENGTH;
 
 public class VirtualTicket {
 
@@ -32,7 +31,7 @@ public class VirtualTicket {
 
     /**
      * Creating a VirtualTicket from information from the backend database.
-     * @param id 8 Character ID
+     * @param id Character ID
      * @param timestamp A Unix timestamp
      * @param uuid UUID of the person who generated the ticket
      * @param ticketMessage Message contained within the ticket
@@ -87,7 +86,7 @@ public class VirtualTicket {
         Random random = new Random();
         StringBuilder id = new StringBuilder();
 
-        for (int i = 0; i < ID_LENGTH; i++) {
+        for (int i = 0; i < StaffTicket.ID_LENGTH; i++) {
             id.append(availableChars[random.nextInt(availableChars.length)]);
         }
 

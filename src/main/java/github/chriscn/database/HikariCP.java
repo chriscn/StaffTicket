@@ -29,11 +29,11 @@ public class HikariCP implements DatabaseManager {
         try {
             this.connection = hikari.getConnection();
             Statement statement = connection.createStatement();
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + plugin.table + "(ID varchar(" + 8 + "), TIMESTAMP bigint(20), UUID varchar(36), MESSAGE text, RESOLVED tinyint(1))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + plugin.table + "(ID varchar(" + StaffTicket.ID_LENGTH + "), TIMESTAMP bigint(20), UUID varchar(36), MESSAGE text, RESOLVED tinyint(1))");
 
             plugin.PLUGIN_ENABLED = true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException(e);
             plugin.PLUGIN_ENABLED = false;
         }
     }
@@ -178,7 +178,7 @@ public class HikariCP implements DatabaseManager {
         return tickets;
     }
 
-    public void handleException(SQLException e) {
+    private void handleException(SQLException e) {
         Bukkit.getLogger().severe("[HIKARICP] Error: " + e.getMessage());
     }
 }

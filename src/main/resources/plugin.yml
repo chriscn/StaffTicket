@@ -1,4 +1,7 @@
 name: StaffTicket
+description: Allows your players to submit tickets with bug reports, hacking and so much more.
+author: Christopher Nethercott
+authors: [Thorin, ThorinDev]
 version: ${project.version}
 main: github.chriscn.StaffTicket
 api-version: 1.16
@@ -10,3 +13,4 @@ commands:
     usage: /createticket <message>
   staffticket:
     usage: /staffticket <reload>
+    aliases: st

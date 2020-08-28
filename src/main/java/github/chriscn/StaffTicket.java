@@ -3,7 +3,6 @@ package github.chriscn;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import github.chriscn.api.VirtualTicket;
-import github.chriscn.command.CreateTicketCommand;
 import github.chriscn.database.DatabaseManager;
 import github.chriscn.database.HikariCP;
 import github.chriscn.database.MySQL;
@@ -57,7 +56,6 @@ public final class StaffTicket extends JavaPlugin {
         saveConfig();
 
         getCommand("ticket").setExecutor(new TicketCommand(this));
-        getCommand("createticket").setExecutor(new CreateTicketCommand(this));
         getCommand("staffticket").setExecutor(new StaffTicketCommand(this));
 
         reloadPlugin();

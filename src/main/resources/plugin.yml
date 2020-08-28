@@ -9,8 +9,7 @@ load: STARTUP
 commands:
   ticket:
     usage: /ticket
-  createticket:
-    usage: /createticket <message>
+    aliases: t
   staffticket:
     usage: /staffticket <reload>
     aliases: st

@@ -67,6 +67,8 @@ public class TicketCommand implements TabExecutor {
                             player.sendMessage(plugin.NO_PERMISSION);
                             return true;
                         }
+                    } else {
+                        return false;
                     }
                 }
             } else {

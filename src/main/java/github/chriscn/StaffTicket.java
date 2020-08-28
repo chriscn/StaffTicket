@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public final class StaffTicket extends JavaPlugin {
 
-    public Permission stOpen = new Permission("staffticket.open");
+    public Permission stCreate = new Permission("staffticket.create");
     public Permission stReview = new Permission("staffticket.review");
     public Permission stList = new Permission("staffticket.list");
     public Permission stResolve = new Permission("staffticket.resolve");
@@ -50,7 +50,7 @@ public final class StaffTicket extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        permissionOptions.put("open", stOpen);
+        permissionOptions.put("create", stCreate);
         permissionOptions.put("review", stReview);
         permissionOptions.put("list", stList);
         permissionOptions.put("resolve", stResolve);

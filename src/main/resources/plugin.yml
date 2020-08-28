@@ -8,9 +8,8 @@ api-version: 1.16
 load: STARTUP
 commands:
   ticket:
-    usage: /ticket
-  createticket:
-    usage: /createticket <message>
+    usage: /ticket <create/review/assign/resolve> (id)
+    aliases: t
   staffticket:
-    usage: /staffticket <reload>
+    usage: /staffticket <reload/info>
     aliases: st

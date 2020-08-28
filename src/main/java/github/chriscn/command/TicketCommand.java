@@ -20,97 +20,84 @@ public class TicketCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (plugin.PLUGIN_ENABLED) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                if (args.length == 0) {
-                    player.sendMessage(ChatColor.RED + "Check your syntax");
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (plugin.PLUGIN_ENABLED) {
+                if (args.length < 1) {
                     return false;
-                } else if (args.length == 1) { // list
-                    String option = args[0].toLowerCase();
-
-                    if (option.equalsIgnoreCase("list")) {
-                        sender.sendMessage(ChatColor.RED + "Implement LIST");
-                    } else {
-                        return unknownArgument(player);
-                    }
-
-                    return true;
-                } else if (args.length == 2) { // review,close (stuff where you provide an id)
-                    String option = args[0].toLowerCase();
-                    String id = args[1].toLowerCase();
-
-                    switch (option) {
-                        case "review":
-                            if (player.hasPermission(plugin.stReview)) {
-                                if (!plugin.db.ticketExists(id)) {
-                                    player.sendMessage(ChatColor.RED + "Unfortunately the ticket with id, " + ChatColor.YELLOW + id + ChatColor.RED + " does not exist.");
-                                } else {
-                                    VirtualTicket ticket = plugin.db.getTicket(id);
-
-                                    player.sendMessage("ID " + ticket.getID());
-                                    player.sendMessage("Timestamp " + ticket.getISO8601());
-                                    player.sendMessage("Player " + ticket.getSenderName());
-                                    player.sendMessage("Ticket Message " + ticket.getTicketMessage());
-                                    player.sendMessage("Resolved " + ticket.getResolved());
-                                }
-                            } else player.sendMessage(plugin.NO_PERMISSION);
-                            break;
-                        case "close":
-                        case "resolve":
-                            if (player.hasPermission(plugin.stClose)) {
-                                plugin.db.resolveTicket(id, true);
-                                player.sendMessage(ChatColor.GREEN + "Resolved ticket with ID " + id);
-
-                            } else player.sendMessage(plugin.NO_PERMISSION);
-                            break;
-                        default:
-                            return unknownArgument(player);
-                    }
-                    return true;
                 } else {
-                    player.sendMessage(ChatColor.RED + "too many arguments");
-                    // you fucked up
-                }
+                    String option = args[0];
+                    if (option.equalsIgnoreCase("create")) {
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 1; i < args.length; i++) {
+                            sb.append(args[i]).append(" ");
+                        }
 
+                        VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), sb.toString().trim());
+
+                        plugin.db.createTicket(ticket);
+
+                        player.sendMessage(ChatColor.GREEN + "Created you a ticket with id, " + ChatColor.YELLOW + ticket.getID());
+
+                        return true;
+                    } else {
+                        if (option.equalsIgnoreCase("assign")) {
+                            if (args.length == 3) {
+                                // TODO implement assign logic
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            if (args.length == 2) {
+                                String id = args[1];
+                                switch (option.toLowerCase()) {
+                                    case "review":
+                                        VirtualTicket review = plugin.db.getTicket(id);
+                                        player.sendMessage(review.getID() + ": " + review.getTicketMessage());
+                                    default:
+                                        return false;
+                                }
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+                }
             } else {
-                sender.sendMessage(plugin.NOT_PLAYER);
+                player.sendMessage(plugin.PLUGIN_DISABLED);
                 return true;
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Plugin is disabled. Check your config and reload it with /staffticket reload");
+            sender.sendMessage(plugin.NOT_PLAYER);
             return true;
         }
-        return false;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            ArrayList<String> firstArgument = new ArrayList<>();
+            ArrayList<String> options = new ArrayList<>();
 
-            if (sender.hasPermission(plugin.stList)) firstArgument.add("list");
-            if (sender.hasPermission(plugin.stReview)) firstArgument.add("review");
-            if (sender.hasPermission(plugin.stClose)) firstArgument.add("resolve");
+            plugin.permissionOptions.inverse().forEach((perm, option) -> {
+                if (sender.hasPermission(perm)) {
+                    options.add(option);
+                }
+            });
 
-            return firstArgument;
+            return options;
         } else if (args.length == 2) {
-            ArrayList<String> ticketID = new ArrayList<>();
+            if (!(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("list"))) {
+                ArrayList<String> ticketID = new ArrayList<>();
+                // contact database and get all tickets
 
-            // contact database and get all tickets
+                for (VirtualTicket ticket : plugin.tickets) {
+                    ticketID.add(ticket.getID());
+                }
 
-            for (VirtualTicket ticket : plugin.tickets) {
-                ticketID.add(ticket.getID());
+                return ticketID;
             }
-
-            return ticketID;
         }
         return null;
-    }
-
-
-    private boolean unknownArgument(Player player) {
-        player.sendMessage(ChatColor.RED + "Unknown argument");
-        return false;
     }
 }

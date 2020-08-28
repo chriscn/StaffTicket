@@ -5,7 +5,6 @@ import com.google.common.collect.HashBiMap;
 import github.chriscn.api.VirtualTicket;
 import github.chriscn.database.DatabaseManager;
 import github.chriscn.database.HikariCP;
-import github.chriscn.database.MySQL;
 import github.chriscn.command.StaffTicketCommand;
 import github.chriscn.command.TicketCommand;
 import net.md_5.bungee.api.ChatColor;
@@ -104,9 +103,6 @@ public final class StaffTicket extends JavaPlugin {
 
         switch (storageMethod) {
             case "mysql":
-                this.db = new MySQL(this);
-                break;
-            case "hikaricp":
                 this.db = new HikariCP(this);
                 break;
             default:

@@ -96,15 +96,14 @@ public class TicketCommand implements TabExecutor {
 
             return options;
         } else if (args.length == 2) {
-            if (!(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("list"))) {
-                ArrayList<String> ticketID = new ArrayList<>();
-                // contact database and get all tickets
+            if (args[0].equalsIgnoreCase("assign")) {
+                ArrayList<String> groups = new ArrayList<>();
 
-                for (VirtualTicket ticket : plugin.tickets) {
-                    ticketID.add(ticket.getID());
+                for (String group : plugin.groups.keySet()) {
+                    groups.add(group);
                 }
 
-                return ticketID;
+                return groups;
             }
         }
         return null;

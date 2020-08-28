@@ -27,38 +27,45 @@ public class TicketCommand implements TabExecutor {
                     return false;
                 } else {
                     String option = args[0];
-                    if (option.equalsIgnoreCase("create")) {
-                        StringBuilder sb = new StringBuilder();
-                        for (int i = 1; i < args.length; i++) {
-                            sb.append(args[i]).append(" ");
-                        }
+                    if (plugin.permissionOptions.containsKey(option)) {
+                        if (player.hasPermission(plugin.permissionOptions.get(option))) {
+                            if (option.equalsIgnoreCase("create")) {
+                                StringBuilder sb = new StringBuilder();
+                                for (int i = 1; i < args.length; i++) {
+                                    sb.append(args[i]).append(" ");
+                                }
 
-                        VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), sb.toString().trim());
-                        plugin.db.createTicket(ticket);
+                                VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), sb.toString().trim());
+                                plugin.db.createTicket(ticket);
 
-                        player.sendMessage(ChatColor.GREEN + "Created you a ticket with id, " + ChatColor.YELLOW + ticket.getID());
-                        return true;
-                    } else {
-                        if (option.equalsIgnoreCase("assign")) {
-                            if (args.length == 3) {
-                                // TODO implement assign logic
+                                player.sendMessage(ChatColor.GREEN + "Created you a ticket with id, " + ChatColor.YELLOW + ticket.getID());
                                 return true;
                             } else {
-                                return false;
+                                if (option.equalsIgnoreCase("assign")) {
+                                    if (args.length == 3) {
+                                        // TODO implement assign logic
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                } else {
+                                    if (args.length == 2) {
+                                        String id = args[1];
+                                        switch (option.toLowerCase()) {
+                                            case "review":
+                                                VirtualTicket review = plugin.db.getTicket(id);
+                                                player.sendMessage(review.getID() + ": " + review.getTicketMessage());
+                                            default:
+                                                return false;
+                                        }
+                                    } else {
+                                        return false;
+                                    }
+                                }
                             }
                         } else {
-                            if (args.length == 2) {
-                                String id = args[1];
-                                switch (option.toLowerCase()) {
-                                    case "review":
-                                        VirtualTicket review = plugin.db.getTicket(id);
-                                        player.sendMessage(review.getID() + ": " + review.getTicketMessage());
-                                    default:
-                                        return false;
-                                }
-                            } else {
-                                return false;
-                            }
+                            player.sendMessage(plugin.NO_PERMISSION);
+                            return true;
                         }
                     }
                 }

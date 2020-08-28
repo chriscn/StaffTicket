@@ -19,7 +19,6 @@ public final class StaffTicket extends JavaPlugin {
 
     public Permission stCreate = new Permission("staffticket.create");
     public Permission stReview = new Permission("staffticket.review");
-    public Permission stList = new Permission("staffticket.list");
     public Permission stResolve = new Permission("staffticket.resolve");
     public Permission stAssign = new Permission("staffticket.assign");
 
@@ -52,7 +51,6 @@ public final class StaffTicket extends JavaPlugin {
         // Plugin startup logic
         permissionOptions.put("create", stCreate);
         permissionOptions.put("review", stReview);
-        permissionOptions.put("list", stList);
         permissionOptions.put("resolve", stResolve);
         permissionOptions.put("assign", stAssign);
 

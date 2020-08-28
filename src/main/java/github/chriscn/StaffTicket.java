@@ -20,7 +20,9 @@ public final class StaffTicket extends JavaPlugin {
     public Permission stOpen = new Permission("staffticket.open");
     public Permission stReview = new Permission("staffticket.review");
     public Permission stList = new Permission("staffticket.list");
-    public Permission stClose = new Permission("staffticket.close");
+    public Permission stResolve = new Permission("staffticket.resolve");
+
+    public BiMap<String, Permission> permissionOptions = HashBiMap.create();
 
     public String NOT_PLAYER = ChatColor.RED + "You must be a player to use this command.";
     public String NO_PERMISSION = ChatColor.RED + "You do not have permission to use this command";
@@ -47,9 +49,14 @@ public final class StaffTicket extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        Bukkit.getPluginManager().addPermission(stOpen);
-        Bukkit.getPluginManager().addPermission(stReview);
-        Bukkit.getPluginManager().addPermission(stClose);
+        permissionOptions.put("open", stOpen);
+        permissionOptions.put("review", stReview);
+        permissionOptions.put("list", stList);
+        permissionOptions.put("resolve", stResolve);
+
+        for (Permission perm : permissionOptions.values()) {
+            Bukkit.getPluginManager().addPermission(perm);
+        }
 
         getConfig().options().copyDefaults(true);
         saveConfig();

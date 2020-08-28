@@ -1,6 +1,7 @@
 package github.chriscn;
 
-import github.chriscn.api.AssignableGroup;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import github.chriscn.api.VirtualTicket;
 import github.chriscn.command.CreateTicketCommand;
 import github.chriscn.database.DatabaseManager;
@@ -11,12 +12,10 @@ import github.chriscn.command.TicketCommand;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public final class StaffTicket extends JavaPlugin {
 
@@ -27,6 +26,8 @@ public final class StaffTicket extends JavaPlugin {
 
     public String NOT_PLAYER = ChatColor.RED + "You must be a player to use this command.";
     public String NO_PERMISSION = ChatColor.RED + "You do not have permission to use this command";
+    public String PLUGIN_DISABLED = ChatColor.RED + "Uh oh! This plugin is disabled, ask an administrator to check the config and then run " + ChatColor.YELLOW + "/st reload";
+
 
     public static final int ID_LENGTH = 8;
 
@@ -36,7 +37,7 @@ public final class StaffTicket extends JavaPlugin {
     public FileConfiguration config;
 
     public ArrayList<VirtualTicket> tickets = new ArrayList<>();
-    public HashMap<String, AssignableGroup> groups = new HashMap<>();
+    public BiMap<String, Permission> groups = HashBiMap.create();
 
     public String host;
     public int port;
@@ -85,6 +86,10 @@ public final class StaffTicket extends JavaPlugin {
         this.config = this.getConfig(); // refresh the config
 
         setupStorageMethod();
+
+        for (String s : config.getStringList("assignable-groups")) {
+            groups.put(s, new Permission("staffticket.group." + s));
+        }
 
         this.tickets = null;
         if(this.PLUGIN_ENABLED) this.tickets = this.db.getAllTickets();

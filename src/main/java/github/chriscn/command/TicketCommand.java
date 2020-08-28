@@ -34,11 +34,9 @@ public class TicketCommand implements TabExecutor {
                         }
 
                         VirtualTicket ticket = new VirtualTicket(player.getUniqueId(), sb.toString().trim());
-
                         plugin.db.createTicket(ticket);
 
                         player.sendMessage(ChatColor.GREEN + "Created you a ticket with id, " + ChatColor.YELLOW + ticket.getID());
-
                         return true;
                     } else {
                         if (option.equalsIgnoreCase("assign")) {

@@ -51,13 +51,15 @@ public class TicketCommand implements TabExecutor {
                                 } else {
                                     if (args.length == 2) {
                                         String id = args[1];
-                                        switch (option.toLowerCase()) {
-                                            case "review":
-                                                VirtualTicket review = plugin.db.getTicket(id);
-                                                player.sendMessage(review.getID() + ": " + review.getTicketMessage());
-                                            default:
-                                                return false;
+                                        if (option.equalsIgnoreCase("review")) {
+                                            VirtualTicket review = plugin.db.getTicket(id);
+                                            player.sendMessage(ChatColor.GREEN + review.getID() + ": " + review.getTicketMessage());
+                                            player.sendMessage("Made at " + review.getISO8601());
+                                        } else if (option.equalsIgnoreCase("resolve")) {
+                                            plugin.db.resolveTicket(id, true);
+                                            player.sendMessage("Resolved ticket, " + id + ".");
                                         }
+                                        return true;
                                     } else {
                                         return false;
                                     }

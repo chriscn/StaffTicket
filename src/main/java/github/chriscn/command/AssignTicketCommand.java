@@ -24,7 +24,6 @@ public class AssignTicketCommand implements TabExecutor {
             } else {
 
             }
-
         } else {
             sender.sendMessage(plugin.NOT_PLAYER);
             return true;

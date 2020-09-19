@@ -1,5 +1,5 @@
 # StaffTicket
-Allows your users to submit tickets of bug reports, hacking, etc
+Allows your users to submit tickets of bug reports, hacking, etc.
 ## Permissions
 - `staffticket.open` - Allows the opening of tickets
 - `staffticket.review` - Allows the reviewing of tickets, seeing all tickets that aren't resolved
